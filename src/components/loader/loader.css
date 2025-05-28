@@ -1,0 +1,23 @@
+.loader-bg {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 100lvw;
+  height: 100lvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: wait;
+}
+
+.loader-container {
+  width: 10lvw;
+  height: 10lvw;
+  border-radius: 36px;
+}
+
+.disappear {
+  display: none !important;
+}

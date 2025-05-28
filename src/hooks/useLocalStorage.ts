@@ -1,17 +1,21 @@
-type LocalStorageType = {
-  get: (k: string) => string;
-  set: (k: string, v: string) => void;
-  remove: (k: string) => void;
-};
+import { useState } from "react";
 
-const useLocalStorage = () => {
-  const localStorage: LocalStorageType = {
-    get: (k: string) => window.localStorage.getItem(k) ?? "",
-    set: (k: string, v: string) => window.localStorage.setItem(k, v),
-    remove: (k: string) => window.localStorage.removeItem(k),
+const useLocalStorage = (
+  key: string,
+  initialValue?: string
+): [string, (newValue: string) => void] => {
+  const [keyvaluePair, setKeyvaluePair] = useState({
+    key: localStorage.getItem(key) ?? initialValue ?? "",
+  });
+
+  if (initialValue) localStorage.setItem(key, keyvaluePair.key);
+
+  const setLocalStorageValue = (newValue: string) => {
+    localStorage.setItem(key, newValue);
+    setKeyvaluePair({ key: newValue });
   };
 
-  return localStorage;
+  return [keyvaluePair.key, setLocalStorageValue];
 };
 
 export default useLocalStorage;

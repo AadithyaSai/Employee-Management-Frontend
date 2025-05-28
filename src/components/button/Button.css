@@ -4,12 +4,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 12px;
   padding: 1em 2em;
   font-size: 1em;
   font-weight: 700;
   color: white;
   border-radius: 0.3em;
   border: none;
+  cursor: pointer;
+}
+
+.button-container-text {
+  position: absolute;
+  z-index: -1;
 }
 
 .button--default {
@@ -38,4 +45,11 @@
 
 .button--outline:hover {
   background-color: #f4f4f4;
+}
+
+.button--icon {
+  padding: 18px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
 }

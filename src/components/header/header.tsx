@@ -4,11 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 const Header = () => {
-  const localStorage = useLocalStorage();
+  const [, setLoginToken] = useLocalStorage("isLoggedIn");
   const navigate = useNavigate();
 
   const handleSignout = () => {
-    localStorage.set("loggedIn", "false");
+    setLoginToken("false");
     navigate("/login");
   };
   return (

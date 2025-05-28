@@ -1,4 +1,6 @@
 .section-header {
   font-size: 0.75em;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
 }

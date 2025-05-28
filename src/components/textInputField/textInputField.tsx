@@ -1,11 +1,13 @@
 import "./textInputField.css";
 
 type TextInputFieldProps = {
-  placeholder: string;
+  placeholder?: string;
   label: string;
   variants?: string;
   type?: string;
   value?: string;
+  name: string;
+  disabled?: boolean;
   ref?: React.RefObject<HTMLInputElement | null>;
   endAdornment?: React.ReactNode;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,7 +18,9 @@ const TextInputField = ({
   label,
   variants = "default",
   value,
+  name,
   type,
+  disabled,
   onChange,
   endAdornment,
   ref,
@@ -26,12 +30,14 @@ const TextInputField = ({
       <label className={`label--${variants}`}>
         <input
           type={type || "text"}
+          name={name}
           className={`input--${variants}`}
           onChange={onChange}
           placeholder={variants === "default" ? placeholder : ""}
           value={value}
           ref={ref}
           required
+          disabled={disabled}
         />
         <span>{label}</span>
         <div className="end-adornment">{endAdornment}</div>

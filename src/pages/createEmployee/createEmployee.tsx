@@ -17,9 +17,21 @@ const CreateEmployee = () => {
       <SectionHeader title="Create Employee" />
       <form className="employee-create-form">
         <div className="employee-detail-input-section">
-          <TextInputField label="Employee Name" placeholder="Employee Name" />
-          <TextInputField label="Joining Date" placeholder="Joining Date" />
-          <TextInputField label="Experience (Yrs)" placeholder="Experience" />
+          <TextInputField
+            label="Employee Name"
+            placeholder="Employee Name"
+            name="name"
+          />
+          <TextInputField
+            label="Joining Date"
+            placeholder="Joining Date"
+            name="joiningDate"
+          />
+          <TextInputField
+            label="Experience (Yrs)"
+            placeholder="Experience"
+            name="experience"
+          />
           <SelectInputField
             label="Department"
             placeholder="Choose Department"
@@ -39,9 +51,21 @@ const CreateEmployee = () => {
             values={statuses}
           />
           <div className="multiline-input">
-            <TextInputField label="Address" placeholder="Flat No./House No." />
-            <TextInputField label="" placeholder="Address Line 1" />
-            <TextInputField label="" placeholder="Address Line 2" />
+            <TextInputField
+              label="Address"
+              placeholder="Flat No./House No."
+              name="houseNo"
+            />
+            <TextInputField
+              label=""
+              placeholder="Address Line 1"
+              name="line1"
+            />
+            <TextInputField
+              label=""
+              placeholder="Address Line 2"
+              name="line2"
+            />
           </div>
         </div>
         <div className="form-buttons">

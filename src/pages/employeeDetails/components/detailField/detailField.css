@@ -1,0 +1,9 @@
+.detail-field-div {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+}
+
+.detail-field-header {
+  color: #8b8d9d;
+}

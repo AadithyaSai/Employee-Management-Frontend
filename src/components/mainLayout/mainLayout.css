@@ -3,3 +3,6 @@
   display: flex;
   background-color: #fafafa;
 }
+.outlet-container {
+  width: 100%;
+}

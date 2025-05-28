@@ -14,37 +14,61 @@ import {
   EmployeeList,
   NotFound,
 } from "./pages";
-import useLocalStorage from "./hooks/useLocalStorage";
+
+const isLoggedIn = () => {
+  const token = localStorage.getItem("isLoggedIn");
+  console.log("token check", token, token === "true");
+  return token === "true";
+};
+
+const AccessControlledRoute = ({
+  check,
+  trueComponent,
+  falseComponent,
+}: {
+  check: () => boolean;
+  trueComponent: React.ReactNode;
+  falseComponent: React.ReactNode;
+}) => {
+  return <>{check() ? trueComponent : falseComponent}</>;
+};
 
 function App() {
-  const localStorage = useLocalStorage();
-
-  const isLoggedIn = () => {
-    const token = localStorage.get("isLoggedIn");
-    return token === "true";
-  };
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: isLoggedIn() ? (
-        <Navigate to="/employees" />
-      ) : (
-        <Navigate to="/login" />
+      element: (
+        <AccessControlledRoute
+          check={isLoggedIn}
+          trueComponent={<Navigate to="/employees" />}
+          falseComponent={<Navigate to="/login" />}
+        />
       ),
     },
     {
       path: "/login",
-      element: isLoggedIn() ? <Navigate to="/employees" /> : <Login />,
+      element: (
+        <AccessControlledRoute
+          check={isLoggedIn}
+          trueComponent={<Navigate to="/employees" />}
+          falseComponent={<Login />}
+        />
+      ),
     },
     {
       path: "/employees",
-      element: <MainLayout />,
+      element: (
+        <AccessControlledRoute
+          check={isLoggedIn}
+          trueComponent={<MainLayout />}
+          falseComponent={<Navigate to="/login" />}
+        />
+      ),
       children: [
         { index: true, element: <EmployeeList /> },
         { path: "create", element: <CreateEmployee /> },
         { path: ":id", element: <EmployeeDetails /> },
-        { path: "id/edit", element: <EditEmployee /> },
+        { path: ":id/edit", element: <EditEmployee /> },
       ],
     },
     {

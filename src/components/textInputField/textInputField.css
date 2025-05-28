@@ -58,3 +58,8 @@
   top: 10px;
   right: 10px;
 }
+
+.text-input-field-div input:disabled {
+  background-color: #d1d1d1;
+  color: #999;
+}

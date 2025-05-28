@@ -46,6 +46,7 @@ export const UncontrolledLogin = () => {
               label="Username"
               variants="animated"
               ref={usernameRef}
+              name="username"
               onChange={(e) => updateClearButton(e.target.value)}
               endAdornment={
                 <button
@@ -68,6 +69,7 @@ export const UncontrolledLogin = () => {
             <TextInputField
               placeholder="password"
               variants="animated"
+              name="password"
               label="Password"
             />
 

@@ -1,0 +1,21 @@
+.pillbox-container {
+  background-color: #eaf9ff;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-radius: 24px;
+  position: relative;
+  cursor: pointer;
+}
+
+.pillbox-container p {
+  margin-left: 72px;
+  padding-right: 24px;
+  font-size: 16px;
+}
+
+.pillbox-container button {
+  position: absolute;
+  left: 0;
+}

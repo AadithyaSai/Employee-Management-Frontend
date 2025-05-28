@@ -1,4 +1,4 @@
-import { Button, CheckBox } from "../../components";
+import { Button, CheckBox, Loader } from "../../components";
 import { TextInputField } from "../../components";
 import kvLogo from "/assets/kv-logo.png";
 import kvLoginAside from "/assets/kv-login.jpeg";
@@ -8,26 +8,37 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({
+    loginError: "",
     usernameError: "",
     passwordError: "",
   });
   const usernameRef = useRef<HTMLInputElement | null>(null);
-  const localStorage = useLocalStorage();
-  const [isPasswordShown, setIsPasswordShown] = useState(
-    Boolean(localStorage.get("showPassword"))
+  const [, setIsLoggedIn] = useLocalStorage("isLoggedIn", "false");
+  const [isPasswordShown, setIsPasswordShown] = useLocalStorage(
+    "isPasswordShown",
+    "false"
   );
 
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    if (username === "admin" && password === "password") {
-      localStorage.set("isLoggedIn", "true");
-      console.log("logged in");
+    setIsLoading(true);
+    setTimeout(() => {
+      if (username !== "admin" || password !== "password") {
+        setValidationErrors((err) => {
+          return { ...err, loginError: "Wrong username or password" };
+        });
+        return;
+      }
+
+      setIsLoggedIn("true");
+      setIsLoading(false);
       navigate("/employees");
-    }
+    }, 2000);
   };
 
   useEffect(() => {
@@ -62,99 +73,103 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="login-content">
-      <aside className="login-aside">
-        <img
-          className="circle-img"
-          src={kvLoginAside}
-          alt="stock image for login"
-        />
-      </aside>
+    <>
+      <Loader isVisible={isLoading} />
+      <div className="login-content">
+        <aside className="login-aside">
+          <img
+            className="circle-img"
+            src={kvLoginAside}
+            alt="stock image for login"
+          />
+        </aside>
 
-      <main className="login-main">
-        <div className="login-form-content">
-          <div className="logo-div">
-            <a href="#">
-              <img className="logo" src={kvLogo} alt="logo" />
-            </a>
-          </div>
-          <div>
-            <TextInputField
-              placeholder="Username"
-              label="Username"
-              variants="animated"
-              value={username}
-              ref={usernameRef}
-              onChange={(e) => setUsername(e.target.value)}
-              endAdornment={
-                <button
-                  type="button"
-                  onClick={() => setUsername("")}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    fontSize: "16px",
-                    cursor: "pointer",
-                    display: username.length === 0 ? "none" : "block",
-                  }}
-                >
-                  &times;
-                </button>
-              }
-            />
-            <p
-              style={{
-                marginLeft: "6px",
-                color: validationErrors.usernameError ? "red" : "green",
-              }}
-            >
-              {validationErrors.usernameError || "Valid username"}
-            </p>
-          </div>
-          <div>
-            <div style={{ marginBottom: "12px" }}>
+        <main className="login-main">
+          <div className="login-form-content">
+            <div className="logo-div">
+              <a href="#">
+                <img className="logo" src={kvLogo} alt="logo" />
+              </a>
+            </div>
+            <div>
               <TextInputField
-                placeholder="Password"
-                label="Password"
-                type={isPasswordShown ? "text" : "password"}
+                placeholder="Username"
+                label="Username"
+                name="username"
                 variants="animated"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={username}
+                ref={usernameRef}
+                onChange={(e) => setUsername(e.target.value)}
+                endAdornment={
+                  <button
+                    type="button"
+                    onClick={() => setUsername("")}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      fontSize: "16px",
+                      cursor: "pointer",
+                      display: username.length === 0 ? "none" : "block",
+                    }}
+                  >
+                    &times;
+                  </button>
+                }
               />
               <p
                 style={{
                   marginLeft: "6px",
-                  color: validationErrors.passwordError ? "red" : "green",
+                  color: validationErrors.usernameError ? "red" : "green",
                 }}
               >
-                {validationErrors.passwordError || "Valid password"}
+                {validationErrors.usernameError || "Valid username"}
               </p>
             </div>
-            <div style={{ marginLeft: "3px" }}>
-              <CheckBox
-                label="Show password"
-                name="show-password"
-                checkedState={isPasswordShown}
-                onCheckedChange={() => {
-                  setIsPasswordShown((oldVal) => {
-                    localStorage.set("showPassword", String(!oldVal));
-                    return !oldVal;
-                  });
-                }}
-              />
+            <div>
+              <div style={{ marginBottom: "12px" }}>
+                <TextInputField
+                  placeholder="Password"
+                  label="Password"
+                  name="password"
+                  type={isPasswordShown === "true" ? "text" : "password"}
+                  variants="animated"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <p
+                  style={{
+                    marginLeft: "6px",
+                    color: validationErrors.passwordError ? "red" : "green",
+                  }}
+                >
+                  {validationErrors.passwordError || "Valid password"}
+                </p>
+              </div>
+              <div style={{ marginLeft: "3px" }}>
+                <CheckBox
+                  label="Show password"
+                  name="show-password"
+                  checkedState={JSON.parse(isPasswordShown)}
+                  onCheckedChange={() => {
+                    setIsPasswordShown(
+                      isPasswordShown === "false" ? "true" : "false"
+                    );
+                  }}
+                />
+              </div>
             </div>
+            <Button
+              label="Log In"
+              onClick={handleLogin}
+              variants="default full-width"
+              disabled={Object.values(validationErrors).some(
+                (v) => v.length != 0
+              )}
+            />
           </div>
-          <Button
-            label="Log In"
-            onClick={handleLogin}
-            variants="default full-width"
-            disabled={Object.values(validationErrors).some(
-              (v) => v.length != 0
-            )}
-          />
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   );
 };
 
