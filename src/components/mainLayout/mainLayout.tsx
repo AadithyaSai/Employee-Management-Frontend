@@ -3,12 +3,9 @@ import Sidebar from "../sidebar/sidebar";
 import SidebarItem from "../SidebarItem/SidebarItem";
 import peopleIcon from "/assets/icon.svg";
 import "./mainLayout.css";
+import { Outlet } from "react-router-dom";
 
-type MainLayoutProps = {
-  children: React.ReactNode;
-};
-
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = () => {
   return (
     <div>
       <Header />
@@ -16,7 +13,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <Sidebar>
           <SidebarItem name="Employee list" icon={peopleIcon} />
         </Sidebar>
-        <>{children}</>
+        <>
+          <div className="outlet-container">
+            <Outlet />
+          </div>
+        </>
       </div>
     </div>
   );

@@ -21,6 +21,11 @@
   background-color: #0096e0;
 }
 
+.button--default:disabled {
+  background-color: #9dd6f5;
+  box-shadow: none;
+}
+
 .button--full-width {
   width: 100%;
 }

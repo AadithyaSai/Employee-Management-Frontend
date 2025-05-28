@@ -7,6 +7,7 @@ type ButtonProps = {
   onClick?: () => void;
   variants?: string;
   className?: string;
+  disabled?: boolean;
 };
 
 const Button = ({
@@ -16,6 +17,7 @@ const Button = ({
   ref,
   type = "submit",
   className,
+  disabled,
 }: ButtonProps) => {
   const variantClasses = variants
     .split(" ")
@@ -26,6 +28,7 @@ const Button = ({
       ref={ref}
       onClick={onClick}
       className={`button ${variantClasses} ` + className}
+      disabled={disabled}
     >
       {label}
     </button>

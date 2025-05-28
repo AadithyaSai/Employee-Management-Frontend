@@ -4,7 +4,6 @@ import kvLogo from "/assets/kv-logo.png";
 import kvLoginAside from "/assets/kv-login.jpeg";
 import "./Login.css";
 import { useEffect, useRef, useState } from "react";
-import useMousePointer from "../../hooks/useMousePointer";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 const Login = () => {
@@ -15,7 +14,6 @@ const Login = () => {
     passwordError: "",
   });
   const usernameRef = useRef<HTMLInputElement | null>(null);
-  const mousePosition = useMousePointer();
   const localStorage = useLocalStorage();
   const [isPasswordShown, setIsPasswordShown] = useState(
     Boolean(localStorage.get("showPassword"))
@@ -23,11 +21,7 @@ const Login = () => {
   const logIn = () => alert("Logged in");
 
   useEffect(() => {
-    if (username.length > 10) {
-      setValidationErrors((err) => {
-        return { ...err, usernameError: "Username too long" };
-      });
-    } else if (!username) {
+    if (!username) {
       setValidationErrors((err) => {
         return { ...err, usernameError: "Username is required" };
       });
@@ -36,7 +30,20 @@ const Login = () => {
         return { ...err, usernameError: "" };
       });
     }
-  }, [username]);
+    if (!password) {
+      setValidationErrors((err) => {
+        return { ...err, passwordError: "Password is required" };
+      });
+    } else if (password.length < 8) {
+      setValidationErrors((err) => {
+        return { ...err, passwordError: "Password is too short" };
+      });
+    } else {
+      setValidationErrors((err) => {
+        return { ...err, passwordError: "" };
+      });
+    }
+  }, [username, password]);
 
   useEffect(() => {
     if (usernameRef.current) {
@@ -60,7 +67,6 @@ const Login = () => {
             <a href="#">
               <img className="logo" src={kvLogo} alt="logo" />
             </a>
-            <p>{`x: ${mousePosition.x}, y: ${mousePosition.y}`}</p>
           </div>
           <div>
             <TextInputField
@@ -96,36 +102,45 @@ const Login = () => {
             </p>
           </div>
           <div>
-            <TextInputField
-              placeholder="Password"
-              label="Password"
-              type={isPasswordShown ? "text" : "password"}
-              variants="animated"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <CheckBox
-              label="Show password"
-              name="show-password"
-              checkedState={isPasswordShown}
-              onCheckedChange={() => {
-                setIsPasswordShown((oldVal) => {
-                  localStorage.set("showPassword", String(!oldVal));
-                  return !oldVal;
-                });
-              }}
-            />
+            <div style={{ marginBottom: "12px" }}>
+              <TextInputField
+                placeholder="Password"
+                label="Password"
+                type={isPasswordShown ? "text" : "password"}
+                variants="animated"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <p
+                style={{
+                  marginLeft: "6px",
+                  color: validationErrors.passwordError ? "red" : "green",
+                }}
+              >
+                {validationErrors.passwordError || "Valid password"}
+              </p>
+            </div>
+            <div style={{ marginLeft: "3px" }}>
+              <CheckBox
+                label="Show password"
+                name="show-password"
+                checkedState={isPasswordShown}
+                onCheckedChange={() => {
+                  setIsPasswordShown((oldVal) => {
+                    localStorage.set("showPassword", String(!oldVal));
+                    return !oldVal;
+                  });
+                }}
+              />
+            </div>
           </div>
-          <p>
-            {username &&
-              `Username: ${
-                username + ` ${password && `& password: ${password}`}`
-              }`}
-          </p>
           <Button
             label="Log In"
             onClick={logIn}
             variants="default full-width"
+            disabled={Object.values(validationErrors).some(
+              (v) => v.length != 0
+            )}
           />
         </div>
       </main>
