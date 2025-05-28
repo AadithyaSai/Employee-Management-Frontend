@@ -5,6 +5,7 @@ import kvLoginAside from "/assets/kv-login.jpeg";
 import "./Login.css";
 import { useEffect, useRef, useState } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -18,7 +19,16 @@ const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(
     Boolean(localStorage.get("showPassword"))
   );
-  const logIn = () => alert("Logged in");
+
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    if (username === "admin" && password === "password") {
+      localStorage.set("isLoggedIn", "true");
+      console.log("logged in");
+      navigate("/employees");
+    }
+  };
 
   useEffect(() => {
     if (!username) {
@@ -136,7 +146,7 @@ const Login = () => {
           </div>
           <Button
             label="Log In"
-            onClick={logIn}
+            onClick={handleLogin}
             variants="default full-width"
             disabled={Object.values(validationErrors).some(
               (v) => v.length != 0

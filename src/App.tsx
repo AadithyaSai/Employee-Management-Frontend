@@ -14,41 +14,44 @@ import {
   EmployeeList,
   NotFound,
 } from "./pages";
-
-const isLoggedIn = () => {
-  return true;
-};
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: isLoggedIn() ? (
-      <Navigate to="/employees" />
-    ) : (
-      <Navigate to="/login" />
-    ),
-  },
-  {
-    path: "/login",
-    element: isLoggedIn() ? <Navigate to="/employees" /> : <Login />,
-  },
-  {
-    path: "/employees",
-    element: <MainLayout />,
-    children: [
-      { index: true, element: <EmployeeList /> },
-      { path: "create", element: <CreateEmployee /> },
-      { path: ":id", element: <EmployeeDetails /> },
-      { path: "id/edit", element: <EditEmployee /> },
-    ],
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-]);
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
+  const localStorage = useLocalStorage();
+
+  const isLoggedIn = () => {
+    const token = localStorage.get("isLoggedIn");
+    return token === "true";
+  };
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: isLoggedIn() ? (
+        <Navigate to="/employees" />
+      ) : (
+        <Navigate to="/login" />
+      ),
+    },
+    {
+      path: "/login",
+      element: isLoggedIn() ? <Navigate to="/employees" /> : <Login />,
+    },
+    {
+      path: "/employees",
+      element: <MainLayout />,
+      children: [
+        { index: true, element: <EmployeeList /> },
+        { path: "create", element: <CreateEmployee /> },
+        { path: ":id", element: <EmployeeDetails /> },
+        { path: "id/edit", element: <EditEmployee /> },
+      ],
+    },
+    {
+      path: "*",
+      element: <NotFound />,
+    },
+  ]);
   return <RouterProvider router={router} />;
 }
 
