@@ -18,6 +18,18 @@
   border-radius: 36px;
 }
 
+.loader-container svg circle {
+  animation: 1.2s linear infinite rotate;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .disappear {
   display: none !important;
 }
