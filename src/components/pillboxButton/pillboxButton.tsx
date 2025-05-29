@@ -4,7 +4,7 @@ import "./pillboxButton.css";
 type PillboxButtonType = {
   icon: React.ReactNode;
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 const PillboxButton = ({ icon, text, onClick }: PillboxButtonType) => {

@@ -1,0 +1,41 @@
+.employee-list-main {
+  background-color: transparent;
+  width: 100%;
+  padding: 10px 10px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.employee-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.employee-list-content .list-header {
+  background-color: #eaf9ff;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 18px;
+  border-radius: 5px;
+}
+
+.employee-list-content .list-header p {
+  width: 14%;
+  font-weight: bold;
+}
+
+.employee-list-content .list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.list-end-adornment {
+  display: flex;
+  align-items: center;
+  gap: 72px;
+}

@@ -7,12 +7,12 @@ import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
   return (
-    <div>
-      <Header />
+    <div className="full-body">
+      <Sidebar>
+        <SidebarItem name="Employee list" icon={peopleIcon} />
+      </Sidebar>
       <div className="main-content">
-        <Sidebar>
-          <SidebarItem name="Employee list" icon={peopleIcon} />
-        </Sidebar>
+        <Header />
         <>
           <div className="outlet-container">
             <Outlet />

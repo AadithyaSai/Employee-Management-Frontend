@@ -1,9 +1,15 @@
 .detail-field-div {
   display: flex;
   flex-direction: column;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 16px;
+  gap: 5px;
 }
 
 .detail-field-header {
   color: #8b8d9d;
+}
+
+.detail-field-data {
+  color: #434552;
 }

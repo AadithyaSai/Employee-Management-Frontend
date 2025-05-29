@@ -17,7 +17,6 @@ import {
 
 const isLoggedIn = () => {
   const token = localStorage.getItem("isLoggedIn");
-  console.log("token check", token, token === "true");
   return token === "true";
 };
 

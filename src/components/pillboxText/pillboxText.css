@@ -1,0 +1,20 @@
+.rounded--pill {
+  border-radius: 24px;
+  width: fit-content;
+  padding: 4px auto;
+  min-width: 108px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.pillbox-color--yellow {
+  background-color: #f5ecb8;
+}
+
+.pillbox-color--green {
+  background-color: #d3f4be;
+}
+
+.pillbox-color--red {
+  background-color: #ffbfbf;
+}

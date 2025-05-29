@@ -1,88 +1,42 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../../components";
-import { SectionHeader } from "../../components";
-import { SelectInputField } from "../../components";
-import { TextInputField } from "../../components";
+import { useNavigate } from "react-router-dom";
+import { EmployeeForm, SectionHeader } from "../../components";
 import "./editEmployee.css";
+import { useEffect, useState } from "react";
+import type { EmployeeType } from "../../types/types";
 
 const EditEmployee = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
   const navigate = useNavigate();
+  const [employee, setEmployee] = useState({} as EmployeeType);
 
   const editClicked = () => alert("Edited");
-  const cancelClicked = () => navigate(`/employees/:${id}`);
+  const cancelClicked = () => navigate(-1);
 
-  const departments = ["HR", "Developer", "UI", "UX"];
-  const roles = ["HR", "Developer", "UI", "UX"];
-  const statuses = ["Active", "Inactive", "Probation"];
+  useEffect(() => {
+    setEmployee({
+      id: 123,
+      name: Math.random().toString(36).slice(2, 7) + " Doe",
+      employeeId: `E${Math.floor(1000000 + Math.random() * 9999999)}`,
+      dateOfJoining: new Date(),
+      role: ["HR", "Full Stack", "Devops", "UI Engineer", "Backend"][
+        Math.floor(Math.random() * 5)
+      ],
+      status: ["Active", "Inactive", "Probation"][
+        Math.floor(Math.random() * 3)
+      ],
+      experience: Math.floor(Math.random() * 10),
+    } as EmployeeType);
+  }, []);
 
   return (
     <main className="edit-employee-page-main">
       <SectionHeader title="Edit Employee" />
-      <form className="employee-edit-form">
-        <div className="employee-detail-input-section">
-          <TextInputField
-            label="Employee Name"
-            placeholder="Employee Name"
-            name="name"
-          />
-          <TextInputField
-            label="Joining Date"
-            placeholder="Joining Date"
-            name="joiningDate"
-          />
-          <TextInputField
-            label="Experience (Yrs)"
-            placeholder="Experience"
-            name="experience"
-          />
-          <SelectInputField
-            label="Department"
-            placeholder="Choose Department"
-            name="department"
-            values={departments}
-          />
-          <SelectInputField
-            label="Role"
-            placeholder="Choose Role"
-            name="role"
-            values={roles}
-          />
-          <SelectInputField
-            label="Status"
-            placeholder="Status"
-            name="status"
-            values={statuses}
-          />
-          <div className="multiline-input">
-            <TextInputField
-              label="Address"
-              placeholder="Flat No./House No."
-              name="houseNo"
-            />
-            <TextInputField
-              label=""
-              placeholder="Address Line 1"
-              name="line1"
-            />
-            <TextInputField
-              label=""
-              placeholder="Address Line 2"
-              name="line2"
-            />
-          </div>
-          <TextInputField
-            label="Employee ID"
-            disabled
-            value="E-001"
-            name="employeeId"
-          />
-        </div>
-        <div className="form-buttons">
-          <Button label="Edit" onClick={editClicked} variants="default" />
-          <Button label="Cancel" onClick={cancelClicked} variants="outline" />
-        </div>
-      </form>
+      <EmployeeForm
+        employee={employee}
+        setEmployee={setEmployee}
+        handleCancel={cancelClicked}
+        handleSave={editClicked}
+      />
     </main>
   );
 };

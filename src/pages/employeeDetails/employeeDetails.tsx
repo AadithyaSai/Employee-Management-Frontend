@@ -1,11 +1,10 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { PillboxButton, SectionHeader } from "../../components";
+import { Link, useParams } from "react-router-dom";
+import { PillboxButton, PillboxText, SectionHeader } from "../../components";
 import "./employeeDetails.css";
 import DetailField from "./components/detailField/detailField";
 
 const EmployeeDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const editIcon = (
     <svg
@@ -50,11 +49,12 @@ const EmployeeDetails = () => {
       <SectionHeader
         title={`Employee details of ${id}`}
         endAdornment={
-          <PillboxButton
-            icon={editIcon}
-            text="Edit"
-            onClick={() => navigate("edit")}
-          />
+          <Link
+            style={{ color: "inherit", textDecoration: "inherit" }}
+            to="edit"
+          >
+            <PillboxButton icon={editIcon} text="Edit" />{" "}
+          </Link>
         }
       ></SectionHeader>
       <div className="details-content">
@@ -64,13 +64,16 @@ const EmployeeDetails = () => {
         <DetailField header="Role" data="Full Stack" />
         <DetailField
           header="Status"
-          data={<div className="rounded--pill color--yellow">Probation</div>}
+          data={<PillboxText text="probation" color="yellow" />}
         />
         <DetailField
           header="Address"
           data="House 33, Some Place, Some Post Office, 122334"
         />
-        <DetailField header="Employee ID Proof" data={docIcon} />
+        <DetailField
+          header="Employee ID Proof"
+          data={<div className="doc-icon">{docIcon}</div>}
+        />
         <DetailField header="Employee ID" data="E1234232" />
       </div>
     </main>
