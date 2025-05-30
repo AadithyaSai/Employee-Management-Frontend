@@ -13,7 +13,7 @@ type SelectInputField = {
 const SelectInputField = ({
   label,
   name,
-  value,
+  value = "",
   values,
   onChange,
   variant = "default",
@@ -25,16 +25,12 @@ const SelectInputField = ({
     >
       <label>
         {label}
-        <select name={name} required onChange={onChange}>
-          <option value="" selected={value === undefined} hidden disabled>
+        <select name={name} required onChange={onChange} value={value}>
+          <option value="" hidden disabled>
             {placeholder}
           </option>
           {values.map((item, idx) => (
-            <option
-              key={idx}
-              value={item}
-              selected={value?.toLowerCase() === item.toLowerCase()}
-            >
+            <option key={idx} value={item}>
               {item}
             </option>
           ))}
