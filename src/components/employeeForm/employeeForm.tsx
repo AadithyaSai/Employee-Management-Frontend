@@ -46,7 +46,7 @@ const EmployeeForm = ({
         />
         <TextInputField
           label="Password"
-          placeholder="password"
+          placeholder="Password"
           name="password"
           value={employee.password}
           onChange={(e) => {
