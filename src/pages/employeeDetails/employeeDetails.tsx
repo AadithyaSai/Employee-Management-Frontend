@@ -2,9 +2,13 @@ import { Link, useParams } from "react-router-dom";
 import { PillboxButton, PillboxText, SectionHeader } from "../../components";
 import "./employeeDetails.css";
 import DetailField from "./components/detailField/detailField";
+import { useState, useEffect } from "react";
+import type { EmployeeType } from "../../types/types";
+import { dateToString, addressToString } from "../../utils/conversions";
 
 const EmployeeDetails = () => {
   const { id } = useParams();
+  const [employee, setEmployee] = useState({} as EmployeeType);
 
   const editIcon = (
     <svg
@@ -44,6 +48,22 @@ const EmployeeDetails = () => {
     </svg>
   );
 
+  useEffect(() => {
+    setEmployee({
+      id: 123,
+      name: Math.random().toString(36).slice(2, 7) + " Doe",
+      employeeId: `E${Math.floor(1000000 + Math.random() * 9999999)}`,
+      dateOfJoining: new Date(),
+      role: ["HR", "Full Stack", "Devops", "UI Engineer", "Backend"][
+        Math.floor(Math.random() * 5)
+      ],
+      status: ["Active", "Inactive", "Probation"][
+        Math.floor(Math.random() * 3)
+      ],
+      experience: Math.floor(Math.random() * 10),
+    } as EmployeeType);
+  }, []);
+
   return (
     <main className="employee-details-main">
       <SectionHeader
@@ -58,23 +78,30 @@ const EmployeeDetails = () => {
         }
       ></SectionHeader>
       <div className="details-content">
-        <DetailField header="Employee Name" data="Aadithya Sai G Menon" />
-        <DetailField header="Joining Date" data="12/05/2025" />
-        <DetailField header="Experience" data="2 Years" />
-        <DetailField header="Role" data="Full Stack" />
+        <DetailField header="Employee Name" data={employee.name} />
+        <DetailField
+          header="Joining Date"
+          data={employee.dateOfJoining && dateToString(employee.dateOfJoining!)}
+        />
+        <DetailField header="Experience" data={employee.experience} />
+        <DetailField header="Role" data={employee.role} />
         <DetailField
           header="Status"
-          data={<PillboxText text="probation" color="yellow" />}
+          data={<PillboxText text={employee.status!} color="yellow" />}
         />
         <DetailField
           header="Address"
-          data="House 33, Some Place, Some Post Office, 122334"
+          data={
+            employee.address
+              ? addressToString(employee.address)
+              : "Some place some time some pincode 121222"
+          }
         />
         <DetailField
           header="Employee ID Proof"
           data={<div className="doc-icon">{docIcon}</div>}
         />
-        <DetailField header="Employee ID" data="E1234232" />
+        <DetailField header="Employee ID" data={employee.employeeId} />
       </div>
     </main>
   );

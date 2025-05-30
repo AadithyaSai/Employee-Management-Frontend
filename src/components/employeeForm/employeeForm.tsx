@@ -1,4 +1,5 @@
 import type { EmployeeType } from "../../types/types";
+import { dateToString } from "../../utils/conversions";
 import Button from "../button/Button";
 import SelectInputField from "../selectInputField/selectInputField";
 import TextInputField from "../textInputField/textInputField";
@@ -68,7 +69,7 @@ const EmployeeForm = ({
           name="dateOfJoining"
           value={
             employee.dateOfJoining
-              ? `${employee.dateOfJoining?.getDate()}/${employee.dateOfJoining?.getMonth()}/${employee.dateOfJoining?.getFullYear()}`
+              ? `${dateToString(employee.dateOfJoining)}`
               : ""
           }
           onChange={(e) => {
