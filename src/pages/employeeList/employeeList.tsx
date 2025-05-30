@@ -159,7 +159,7 @@ const EmployeeList = () => {
                   fallback={<EmployeeListItemFallback />}
                 >
                   <Link
-                    to={`${employee.employeeId}`}
+                    to={`${employee.id}`}
                     style={{ color: "inherit", textDecoration: "inherit" }}
                   >
                     <EmployeeListItem
@@ -174,7 +174,7 @@ const EmployeeList = () => {
                       action2={{
                         icon: editIcon,
                         actionFn: () => {
-                          navigate(`/employees/${employee.employeeId}/edit`);
+                          navigate(`/employees/${employee.id}/edit`);
                         },
                       }}
                     />
