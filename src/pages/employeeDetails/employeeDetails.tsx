@@ -52,15 +52,26 @@ const EmployeeDetails = () => {
     setEmployee({
       id: 123,
       name: Math.random().toString(36).slice(2, 7) + " Doe",
+      email: Math.random().toString(36).slice(2, 7) + "@example.com",
       employeeId: `E${Math.floor(1000000 + Math.random() * 9999999)}`,
       dateOfJoining: new Date(),
-      role: ["HR", "Full Stack", "Devops", "UI Engineer", "Backend"][
-        Math.floor(Math.random() * 5)
-      ],
+      role: ["Trainee", "L1", "L2", "L3", "CXO"][Math.floor(Math.random() * 5)],
       status: ["Active", "Inactive", "Probation"][
         Math.floor(Math.random() * 3)
       ],
       experience: Math.floor(Math.random() * 10),
+      age: Math.floor(31 + Math.random() * 10),
+      department: {
+        name: ["HR", "Full Stack", "Devops", "UI Engineer", "Backend"][
+          Math.floor(Math.random() * 5)
+        ],
+      },
+      address: {
+        houseNo: "House 123",
+        line1: "Some area",
+        line2: "Some place",
+        pincode: "123456",
+      },
     } as EmployeeType);
   }, []);
 
@@ -79,6 +90,8 @@ const EmployeeDetails = () => {
       ></SectionHeader>
       <div className="details-content">
         <DetailField header="Employee Name" data={employee.name} />
+        <DetailField header="Email" data={employee.email} />
+        <DetailField header="Age" data={employee.age} />
         <DetailField
           header="Joining Date"
           data={employee.dateOfJoining && dateToString(employee.dateOfJoining!)}
@@ -89,6 +102,7 @@ const EmployeeDetails = () => {
           header="Status"
           data={<PillboxText text={employee.status!} color="yellow" />}
         />
+        <DetailField header="Department" data={employee.department?.name} />
         <DetailField
           header="Address"
           data={

@@ -14,14 +14,15 @@ const CheckBox = ({
   checkedState = false,
 }: CheckBoxType) => {
   return (
-    <label>
+    <label className="checkbox-label">
       <input
+        className="checkbox-input"
         type="checkbox"
         name={name}
         onChange={onCheckedChange}
         checked={checkedState}
       />
-      <span>{label}</span>
+      <span className="checkbox-text-span">{label}</span>
     </label>
   );
 };

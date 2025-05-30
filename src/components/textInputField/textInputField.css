@@ -35,8 +35,11 @@
   transition-property: top;
   transition-duration: 0.3s;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 13px;
+  left: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 400;
+  cursor: text;
 }
 
 .text-input-field-div .input--animated:focus + span {
@@ -48,6 +51,7 @@
   background-color: white;
   padding: 2px;
   top: -10px;
+  font-weight: bold;
 }
 
 .text-input-field-div .input--animated:not:placeholder-shown + span {

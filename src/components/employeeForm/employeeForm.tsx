@@ -50,6 +50,7 @@ const EmployeeForm = ({
           placeholder="Password"
           name="password"
           value={employee.password}
+          // style={{ display: "none" }}
           onChange={(e) => {
             setEmployee({ ...employee, [e.target.name]: e.target.value });
           }}

@@ -8,6 +8,7 @@ type TextInputFieldProps = {
   value?: string;
   name: string;
   disabled?: boolean;
+  style?: React.CSSProperties;
   ref?: React.RefObject<HTMLInputElement | null>;
   endAdornment?: React.ReactNode;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,10 +24,11 @@ const TextInputField = ({
   disabled,
   onChange,
   endAdornment,
+  style,
   ref,
 }: TextInputFieldProps) => {
   return (
-    <div className={`text-input-field-div`}>
+    <div className={`text-input-field-div`} style={style}>
       <label className={`label--${variants}`}>
         <input
           type={type || "text"}

@@ -8,6 +8,7 @@
 
 .outlet-container {
   width: 100%;
+  height: inherit;
 }
 
 .full-body {

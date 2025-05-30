@@ -1,0 +1,7 @@
+.checkbox-label {
+  display: flex;
+  vertical-align: middle;
+  width: fit-content;
+  gap: 6px;
+  cursor: pointer;
+}

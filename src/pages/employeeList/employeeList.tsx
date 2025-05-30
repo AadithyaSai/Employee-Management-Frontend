@@ -6,9 +6,14 @@ import {
   SelectInputField,
 } from "../../components";
 import "./employeeList.css";
-import EmployeeListItem from "./components/employeeListitem/employeeListItem";
 import type { EmployeeType } from "../../types/types";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import EmployeeListItemFallback from "./components/employeeListitem/fallback/employeeListItemFallback";
+
+// Lazy Loading
+const EmployeeListItem = lazy(
+  () => import("./components/employeeListitem/employeeListItem")
+);
 
 const EmployeeList = () => {
   const [allEmployees, setAllEmployees] = useState<EmployeeType[]>([]);
@@ -149,28 +154,32 @@ const EmployeeList = () => {
           <div className="list-items">
             {visibleEmployees.map((employee) => {
               return (
-                <Link
+                <Suspense
                   key={employee.id}
-                  to={`${employee.employeeId}`}
-                  style={{ color: "inherit", textDecoration: "inherit" }}
+                  fallback={<EmployeeListItemFallback />}
                 >
-                  <EmployeeListItem
-                    employee={employee}
-                    action1={{
-                      icon: deleteIcon,
-                      actionFn: () => {
-                        setEmployeeIdToDelete(employee.id!);
-                        deleteDialogRef.current?.showModal();
-                      },
-                    }}
-                    action2={{
-                      icon: editIcon,
-                      actionFn: () => {
-                        navigate(`/employees/${employee.employeeId}/edit`);
-                      },
-                    }}
-                  />
-                </Link>
+                  <Link
+                    to={`${employee.employeeId}`}
+                    style={{ color: "inherit", textDecoration: "inherit" }}
+                  >
+                    <EmployeeListItem
+                      employee={employee}
+                      action1={{
+                        icon: deleteIcon,
+                        actionFn: () => {
+                          setEmployeeIdToDelete(employee.id!);
+                          deleteDialogRef.current?.showModal();
+                        },
+                      }}
+                      action2={{
+                        icon: editIcon,
+                        actionFn: () => {
+                          navigate(`/employees/${employee.employeeId}/edit`);
+                        },
+                      }}
+                    />
+                  </Link>
+                </Suspense>
               );
             })}
           </div>
