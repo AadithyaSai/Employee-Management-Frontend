@@ -8,8 +8,8 @@ type DetailFieldProps = {
 const DetailField = ({ header, data }: DetailFieldProps) => {
   return (
     <div className="detail-field-div">
-      <p className="detail-field-header">{header}</p>
-      <p className="detail-field-data">{data}</p>
+      <div className="detail-field-header">{header}</div>
+      <div className="detail-field-data">{data}</div>
     </div>
   );
 };
