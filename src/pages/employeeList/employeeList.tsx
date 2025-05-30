@@ -17,9 +17,9 @@ const EmployeeList = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const filterStatus = searchParams.get("status") ?? "all";
+  const filterStatus = searchParams.get("status") ?? "All";
   const visibleEmployees = useMemo(() => {
-    if (filterStatus === "all") return allEmployees;
+    if (filterStatus === "All") return allEmployees;
 
     return allEmployees.filter((emp) => emp.status === filterStatus);
   }, [allEmployees, filterStatus]);
