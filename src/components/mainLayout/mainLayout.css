@@ -9,8 +9,10 @@
 .outlet-container {
   width: 100%;
   height: inherit;
+  overflow-y: auto;
 }
 
 .full-body {
   display: flex;
+  height: 100vh;
 }
