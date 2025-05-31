@@ -1,10 +1,10 @@
-import type { EmployeeType } from "../types/types";
+import type { Address } from "../store/employee/employee.types";
 
 const dateToString = (date: Date) => {
   return date.toLocaleDateString("en-CA");
 };
 
-const addressToString = (address: EmployeeType["address"]) => {
+const addressToString = (address: Address) => {
   return [
     address?.houseNo,
     address?.line1,
