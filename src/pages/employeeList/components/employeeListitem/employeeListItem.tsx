@@ -1,5 +1,5 @@
 import { PillboxText } from "../../../../components";
-import type { EmployeeType } from "../../../../types/types";
+import type { Employee } from "../../../../store/employee/employee.types";
 import { dateToString } from "../../../../utils/conversions";
 import "./employeeListItem.css";
 
@@ -9,7 +9,7 @@ type ActionType = {
 };
 
 type EmployeeListItemProps = {
-  employee: EmployeeType;
+  employee: Employee;
   action1: ActionType;
   action2: ActionType;
 };
@@ -21,11 +21,11 @@ const EmployeeListItem = ({
 }: EmployeeListItemProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Active":
+      case "ACTIVE":
         return "green";
-      case "Inactive":
+      case "INACTIVE":
         return "red";
-      case "Probation":
+      case "PROBATION":
         return "yellow";
       default:
         return "none";
@@ -36,7 +36,7 @@ const EmployeeListItem = ({
     <div className="employee-row">
       <div>{employee.name}</div>
       <div>{employee.employeeId}</div>
-      <div>{`${dateToString(employee.dateOfJoining!)}`}</div>
+      <div>{dateToString(employee.dateOfJoining)}</div>
       <div>{employee.role}</div>
       <div>
         {

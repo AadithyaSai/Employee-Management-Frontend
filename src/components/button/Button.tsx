@@ -16,7 +16,7 @@ const Button = ({
   onClick,
   variants = "default",
   ref,
-  type = "submit",
+  type = "button",
   icon,
   className,
   disabled,

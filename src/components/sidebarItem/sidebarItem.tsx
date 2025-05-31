@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./SidebarItem.css";
+import "./sidebarItem.css";
 
 type SidebarItemType = {
   name: string;

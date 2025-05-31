@@ -10,7 +10,9 @@ type PillboxButtonType = {
 const PillboxButton = ({ icon, text, onClick }: PillboxButtonType) => {
   return (
     <div className="pillbox-container" onClick={onClick}>
-      <Button icon={icon} variants="default icon" />
+      <div className="pillbox-button">
+        <Button icon={icon} variants="default icon" />
+      </div>
       <p>{text}</p>
     </div>
   );

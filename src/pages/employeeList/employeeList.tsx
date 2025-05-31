@@ -6,9 +6,14 @@ import {
   SelectInputField,
 } from "../../components";
 import "./employeeList.css";
-import type { EmployeeType } from "../../types/types";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useMemo, useRef, useState } from "react";
 import EmployeeListItemFallback from "./components/employeeListitem/fallback/employeeListItemFallback";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  EMPLOYEE_ACTION_TYPES,
+  EmployeeStatus,
+} from "../../store/employee/employee.types";
+import type { rootState } from "../../store/store";
 
 // Lazy Loading
 const EmployeeListItem = lazy(
@@ -16,20 +21,28 @@ const EmployeeListItem = lazy(
 );
 
 const EmployeeList = () => {
-  const [allEmployees, setAllEmployees] = useState<EmployeeType[]>([]);
+  const dispatch = useDispatch();
   const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState(-1);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const filterStatus = searchParams.get("status") ?? "All";
+  const allEmployees = useSelector((state: rootState) => state.employees);
+  const filterStatus = searchParams.get("status") ?? "ALL";
   const visibleEmployees = useMemo(() => {
-    if (filterStatus === "All") return allEmployees;
+    if (!filterStatus || filterStatus === "ALL") return allEmployees;
 
     return allEmployees.filter((emp) => emp.status === filterStatus);
   }, [allEmployees, filterStatus]);
 
   const navigate = useNavigate();
+
+  const deleteEmployee = (id: number) => {
+    dispatch({
+      type: EMPLOYEE_ACTION_TYPES.DELETE,
+      payload: id,
+    });
+  };
 
   const createIcon = (
     <svg
@@ -88,34 +101,15 @@ const EmployeeList = () => {
     </svg>
   );
 
-  useEffect(() => {
-    const employees: EmployeeType[] = [];
-    for (let i = 0; i < 120; i++) {
-      employees.push({
-        id: i + 1,
-        name: Math.random().toString(36).slice(2, 7) + " Doe",
-        employeeId: `E${Math.floor(1000000 + Math.random() * 9999999)}`,
-        dateOfJoining: new Date(),
-        role: ["HR", "Full Stack", "Devops", "UI Engineer", "Backend"][
-          Math.floor(Math.random() * 5)
-        ],
-        status: ["Active", "Inactive", "Probation"][
-          Math.floor(Math.random() * 3)
-        ],
-        experience: Math.floor(Math.random() * 10),
-      });
-    }
-
-    setAllEmployees(employees);
-  }, []);
-
   return (
     <>
       <DialogBox
         title="Are you sure?"
         description="Do you really want to delete employee?"
         ref={deleteDialogRef}
-        onResponse={(val) => console.log(val, employeeIdToDelete)}
+        onResponse={(val) =>
+          val === "confirm" && deleteEmployee(employeeIdToDelete)
+        }
       ></DialogBox>
       <main className="employee-list-main">
         <SectionHeader
@@ -126,7 +120,7 @@ const EmployeeList = () => {
                 label="Filter By"
                 placeholder={filterStatus}
                 name="status"
-                values={["All", "Active", "Inactive", "Probation"]}
+                optionValues={["ALL", ...Object.values(EmployeeStatus)]}
                 variant="inline"
                 onChange={(e) => {
                   setSearchParams({ status: e.target.value });
@@ -167,7 +161,7 @@ const EmployeeList = () => {
                       action1={{
                         icon: deleteIcon,
                         actionFn: () => {
-                          setEmployeeIdToDelete(employee.id!);
+                          setEmployeeIdToDelete(employee.id);
                           deleteDialogRef.current?.showModal();
                         },
                       }}

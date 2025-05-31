@@ -2,13 +2,20 @@ import { Link, useParams } from "react-router-dom";
 import { PillboxButton, PillboxText, SectionHeader } from "../../components";
 import "./employeeDetails.css";
 import DetailField from "./components/detailField/detailField";
-import { useState, useEffect } from "react";
-import type { EmployeeType } from "../../types/types";
-import { dateToString, addressToString } from "../../utils/conversions";
+import { addressToString, dateToString } from "../../utils/conversions";
+import { shallowEqual, useSelector } from "react-redux";
+import type { rootState } from "../../store/store";
 
 const EmployeeDetails = () => {
-  const { id } = useParams();
-  const [employee, setEmployee] = useState({} as EmployeeType);
+  const id = parseInt(useParams()["id"] ?? "NaN");
+  const employee = useSelector(
+    (state: rootState) => state.employees.find((e) => e.id === id),
+    shallowEqual
+  );
+
+  if (!employee) {
+    throw new Error("Bad ID");
+  }
 
   const editIcon = (
     <svg
@@ -48,37 +55,10 @@ const EmployeeDetails = () => {
     </svg>
   );
 
-  useEffect(() => {
-    setEmployee({
-      id: 123,
-      name: Math.random().toString(36).slice(2, 7) + " Doe",
-      email: Math.random().toString(36).slice(2, 7) + "@example.com",
-      employeeId: `E${Math.floor(1000000 + Math.random() * 9999999)}`,
-      dateOfJoining: new Date(),
-      role: ["Trainee", "L1", "L2", "L3", "CXO"][Math.floor(Math.random() * 5)],
-      status: ["Active", "Inactive", "Probation"][
-        Math.floor(Math.random() * 3)
-      ],
-      experience: Math.floor(Math.random() * 10),
-      age: Math.floor(31 + Math.random() * 10),
-      department: {
-        name: ["HR", "Full Stack", "Devops", "UI Engineer", "Backend"][
-          Math.floor(Math.random() * 5)
-        ],
-      },
-      address: {
-        houseNo: "House 123",
-        line1: "Some area",
-        line2: "Some place",
-        pincode: "123456",
-      },
-    } as EmployeeType);
-  }, []);
-
   return (
     <main className="employee-details-main">
       <SectionHeader
-        title={`Employee details of ${id}`}
+        title={`Employee details of ${employee.name}`}
         endAdornment={
           <Link
             style={{ color: "inherit", textDecoration: "inherit" }}
@@ -94,7 +74,7 @@ const EmployeeDetails = () => {
         <DetailField header="Age" data={employee.age} />
         <DetailField
           header="Joining Date"
-          data={employee.dateOfJoining && dateToString(employee.dateOfJoining!)}
+          data={dateToString(employee.dateOfJoining)}
         />
         <DetailField header="Experience" data={employee.experience} />
         <DetailField header="Role" data={employee.role} />
@@ -102,7 +82,7 @@ const EmployeeDetails = () => {
           header="Status"
           data={<PillboxText text={employee.status!} color="yellow" />}
         />
-        <DetailField header="Department" data={employee.department?.name} />
+        <DetailField header="Department" data={employee.department.name} />
         <DetailField
           header="Address"
           data={

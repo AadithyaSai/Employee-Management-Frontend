@@ -15,7 +15,7 @@
   font-size: 16px;
 }
 
-.pillbox-container button {
+.pillbox-container .pillbox-button {
   position: absolute;
   left: 0;
 }

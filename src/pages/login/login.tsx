@@ -2,7 +2,7 @@ import { Button, CheckBox, Loader } from "../../components";
 import { TextInputField } from "../../components";
 import kvLogo from "/assets/kv-logo.png";
 import kvLoginAside from "/assets/kv-login.jpeg";
-import "./Login.css";
+import "./login.css";
 import { useEffect, useRef, useState } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,9 @@ const Login = () => {
     setIsLoading(true);
     setTimeout(() => {
       if (username !== "admin" || password !== "password") {
+        setUsername("");
+        setPassword("");
+        setIsLoading(false);
         setValidationErrors((err) => {
           return { ...err, loginError: "Wrong username or password" };
         });
@@ -162,10 +165,18 @@ const Login = () => {
               label="Log In"
               onClick={handleLogin}
               variants="default full-width"
-              disabled={Object.values(validationErrors).some(
-                (v) => v.length != 0
+              disabled={Boolean(
+                validationErrors.usernameError || validationErrors.passwordError
               )}
             />
+            <p
+              style={{
+                marginLeft: "6px",
+                color: validationErrors.loginError ? "red" : "green",
+              }}
+            >
+              {validationErrors.loginError || ""}
+            </p>
           </div>
         </main>
       </div>

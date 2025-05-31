@@ -1,43 +1,36 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { EmployeeForm, SectionHeader } from "../../components";
 import "./editEmployee.css";
-import { useEffect, useState } from "react";
-import type { EmployeeType } from "../../types/types";
+import { useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { EMPLOYEE_ACTION_TYPES } from "../../store/employee/employee.types";
+import type { rootState } from "../../store/store";
 
 const EditEmployee = () => {
-  // const { id } = useParams();
+  const id = parseInt(useParams()["id"] ?? "NaN");
+  const employeeDetails = useSelector(
+    (state: rootState) => state.employees.find((e) => e.id === id),
+    shallowEqual
+  );
+
+  if (!employeeDetails) {
+    throw new Error("Bad ID");
+  }
+
+  const [employee, setEmployee] = useState(employeeDetails);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [employee, setEmployee] = useState({} as EmployeeType);
 
-  const editClicked = () => alert("Edited");
+  const editClicked = () => {
+    dispatch({
+      type: EMPLOYEE_ACTION_TYPES.UPDATE,
+      payload: employee,
+    });
+    navigate(`/employees/${id}`);
+  };
+
   const cancelClicked = () => navigate(-1);
-
-  useEffect(() => {
-    setEmployee({
-      id: 123,
-      name: Math.random().toString(36).slice(2, 7) + " Doe",
-      email: Math.random().toString(36).slice(2, 7) + "@example.com",
-      employeeId: `E${Math.floor(1000000 + Math.random() * 9999999)}`,
-      dateOfJoining: new Date(),
-      role: ["Trainee", "L1", "L2", "L3", "CXO"][Math.floor(Math.random() * 5)],
-      status: ["Active", "Inactive", "Probation"][
-        Math.floor(Math.random() * 3)
-      ],
-      experience: Math.floor(Math.random() * 10),
-      age: Math.floor(31 + Math.random() * 10),
-      department: {
-        name: ["HR", "Full Stack", "Devops", "UI Engineer", "Backend"][
-          Math.floor(Math.random() * 5)
-        ],
-      },
-      address: {
-        houseNo: "House 123",
-        line1: "Some area",
-        line2: "Some place",
-        pincode: "123456",
-      },
-    } as EmployeeType);
-  }, []);
 
   return (
     <main className="edit-employee-page-main">

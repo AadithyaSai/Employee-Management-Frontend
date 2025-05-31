@@ -10,7 +10,7 @@ import PillboxText from "./pillboxText/pillboxText";
 import SectionHeader from "./sectionHeader/sectionHeader";
 import SelectInputField from "./selectInputField/selectInputField";
 import Sidebar from "./sidebar/sidebar";
-import SidebarItem from "./SidebarItem/SidebarItem";
+import SidebarItem from "./sidebarItem/sidebarItem";
 import TextInputField from "./textInputField/textInputField";
 
 export {

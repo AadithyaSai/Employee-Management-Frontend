@@ -1,15 +1,11 @@
 .main-layout-aside {
   background-color: white;
   width: 300px;
-  flex-shrink: 0;
   box-shadow: 0px 3px 6px #00000029;
   z-index: 2;
-}
-
-.main-layout-aside-nav {
-  margin-top: 24px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .main-layout-aside .logo-container {
@@ -23,4 +19,19 @@
 .main-layout-aside .aside-logo {
   width: 75%;
   display: inline-block;
+}
+
+.main-layout-aside-nav {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-layout-aside-signout {
+  margin: 42px 18px;
+  width: calc(100% - 36px);
+}
+
+.main-layout-aside-signout svg path {
+  stroke: #8a8c8f;
 }

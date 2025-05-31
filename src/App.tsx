@@ -4,11 +4,12 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./App.css";
-import Login from "./pages/login/Login";
-// import UncontrolledLogin from "./pages/login/UncontrolledLogin";
+import Login from "./pages/login/login";
 import { MainLayout } from "./components";
 import { NotFound } from "./pages";
 import { lazy } from "react";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const CreateEmployee = lazy(
   () => import("./pages/createEmployee/createEmployee")
@@ -80,7 +81,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }
 
 export default App;

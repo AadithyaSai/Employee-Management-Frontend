@@ -1,7 +1,7 @@
 import type { EmployeeType } from "../types/types";
 
 const dateToString = (date: Date) => {
-  return date.getDate() + "." + date.getMonth() + "." + date.getFullYear();
+  return date.toLocaleDateString("en-CA");
 };
 
 const addressToString = (address: EmployeeType["address"]) => {

@@ -5,7 +5,7 @@ type SelectInputField = {
   name: string;
   placeholder: string;
   value?: string;
-  values: Array<string>;
+  optionValues: Array<string> | Array<readonly [string, string]>;
   variant?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
@@ -14,11 +14,15 @@ const SelectInputField = ({
   label,
   name,
   value = "",
-  values,
+  optionValues,
   onChange,
   variant = "default",
   placeholder,
 }: SelectInputField) => {
+  const valueNamePairs = Array.isArray(optionValues[0])
+    ? optionValues
+    : optionValues.map((elem) => [elem, elem]);
+
   return (
     <div
       className={`select-input-field-div select-input-field-div--${variant}`}
@@ -29,9 +33,9 @@ const SelectInputField = ({
           <option value="" hidden disabled>
             {placeholder}
           </option>
-          {values.map((item, idx) => (
-            <option key={idx} value={item}>
-              {item}
+          {valueNamePairs.map((item, idx) => (
+            <option key={idx} value={item[0]}>
+              {item[1]}
             </option>
           ))}
         </select>
