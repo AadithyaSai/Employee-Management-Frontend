@@ -2,14 +2,14 @@ import { Link, useParams } from "react-router-dom";
 import { PillboxButton, PillboxText, SectionHeader } from "../../components";
 import "./employeeDetails.css";
 import DetailField from "./components/detailField/detailField";
-import { addressToString, dateToString } from "../../utils/conversions";
-import { shallowEqual, useSelector } from "react-redux";
-import type { rootState } from "../../store/store";
+import { addressToString, timestampToString } from "../../utils/conversions";
+import { shallowEqual } from "react-redux";
+import { useAppSelector, type RootState } from "../../store/store";
 
 const EmployeeDetails = () => {
   const id = parseInt(useParams()["id"] ?? "NaN");
-  const employee = useSelector(
-    (state: rootState) => state.employees.find((e) => e.id === id),
+  const employee = useAppSelector(
+    (state: RootState) => state.employees.find((e) => e.id === id),
     shallowEqual
   );
 
@@ -74,7 +74,7 @@ const EmployeeDetails = () => {
         <DetailField header="Age" data={employee.age} />
         <DetailField
           header="Joining Date"
-          data={dateToString(employee.dateOfJoining)}
+          data={timestampToString(employee.dateOfJoining)}
         />
         <DetailField header="Experience" data={employee.experience} />
         <DetailField header="Role" data={employee.role} />

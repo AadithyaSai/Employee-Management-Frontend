@@ -1,33 +1,26 @@
-import {
-  EMPLOYEE_ACTION_TYPES,
-  type EmployeeAction,
-  type EmployeeState,
-} from "./employee.types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { type Employee, type EmployeeState } from "./employee.types";
 
-const initialEmployeeState: EmployeeState = [];
+const initialState: EmployeeState = [];
 
-const employeeReducer = (
-  state = initialEmployeeState,
-  action: EmployeeAction
-) => {
-  switch (action.type) {
-    case EMPLOYEE_ACTION_TYPES.ADD:
-      return [
-        ...state,
-        { ...action.payload, id: Math.floor(Math.random() * 1000) },
-      ];
-
-    case EMPLOYEE_ACTION_TYPES.DELETE:
-      return state.filter((employee) => employee.id !== action.payload);
-
-    case EMPLOYEE_ACTION_TYPES.UPDATE:
+const employeeSlice = createSlice({
+  name: "employees",
+  initialState,
+  reducers: {
+    addEmployee: (state, action: PayloadAction<Employee>) => {
+      state.push(action.payload);
+    },
+    updateEmployee: (state, action: PayloadAction<Employee>) => {
       return state.map((employee) =>
         employee.id === action.payload.id ? action.payload : employee
       );
+    },
+    deleteEmployee: (state, action: PayloadAction<number>) => {
+      return state.filter((employee) => employee.id !== action.payload);
+    },
+  },
+});
 
-    default:
-      return state;
-  }
-};
-
-export default employeeReducer;
+export const { addEmployee, updateEmployee, deleteEmployee } =
+  employeeSlice.actions;
+export default employeeSlice.reducer;

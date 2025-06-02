@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import {
   EmployeeRole,
   EmployeeStatus,
@@ -8,8 +7,8 @@ import Button from "../button/Button";
 import SelectInputField from "../selectInputField/selectInputField";
 import TextInputField from "../textInputField/textInputField";
 import "./employeeForm.css";
-import type { rootState } from "../../store/store";
-import { dateToString } from "../../utils/conversions";
+import { useAppSelector } from "../../store/store";
+import { timestampToString } from "../../utils/conversions";
 
 type EmployeeFormProps = {
   employee: Employee;
@@ -26,7 +25,7 @@ const EmployeeForm = ({
 }: EmployeeFormProps) => {
   const isEdit = employee.id !== -1;
 
-  const departments = useSelector((state: rootState) => state.departments);
+  const departments = useAppSelector((state) => state.departments);
   const roles = Object.values(EmployeeRole);
   const statuses = Object.values(EmployeeStatus);
 
@@ -76,10 +75,15 @@ const EmployeeForm = ({
           name="dateOfJoining"
           type="date"
           value={
-            employee.dateOfJoining ? dateToString(employee.dateOfJoining) : ""
+            employee.dateOfJoining
+              ? timestampToString(employee.dateOfJoining)
+              : ""
           }
           onChange={(e) => {
-            setEmployee({ ...employee, [e.target.name]: e.target.valueAsDate });
+            setEmployee({
+              ...employee,
+              [e.target.name]: e.target.valueAsDate?.getTime(),
+            });
           }}
         />
         <TextInputField
@@ -135,7 +139,11 @@ const EmployeeForm = ({
             label="Address"
             placeholder="Flat No./House No."
             name="houseNo"
-            value={employee.address ? employee.address.houseNo : ""}
+            value={
+              employee.address && employee.address.houseNo
+                ? employee.address.houseNo
+                : ""
+            }
             onChange={(e) => {
               setEmployee({
                 ...employee,
@@ -150,7 +158,11 @@ const EmployeeForm = ({
             label=""
             placeholder="Address Line 1"
             name="line1"
-            value={employee.address ? employee.address.line1 : ""}
+            value={
+              employee.address && employee.address.line1
+                ? employee.address.line1
+                : ""
+            }
             onChange={(e) => {
               setEmployee({
                 ...employee,
@@ -165,7 +177,11 @@ const EmployeeForm = ({
             label=""
             placeholder="Address Line 2"
             name="line2"
-            value={employee.address ? employee.address.line2 : ""}
+            value={
+              employee.address && employee.address.line2
+                ? employee.address.line2
+                : ""
+            }
             onChange={(e) => {
               setEmployee({
                 ...employee,
@@ -180,7 +196,11 @@ const EmployeeForm = ({
             label=""
             placeholder="Pincode"
             name="pincode"
-            value={employee.address ? employee.address.pincode : ""}
+            value={
+              employee.address && employee.address.pincode
+                ? employee.address.pincode
+                : ""
+            }
             onChange={(e) => {
               setEmployee({
                 ...employee,

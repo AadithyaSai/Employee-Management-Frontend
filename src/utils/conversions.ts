@@ -1,7 +1,7 @@
 import type { Address } from "../store/employee/employee.types";
 
-const dateToString = (date: Date) => {
-  return date.toLocaleDateString("en-CA");
+const timestampToString = (ts: number) => {
+  return new Date(ts).toLocaleDateString("en-CA");
 };
 
 const addressToString = (address: Address) => {
@@ -13,4 +13,4 @@ const addressToString = (address: Address) => {
   ].join(", ");
 };
 
-export { addressToString, dateToString };
+export { addressToString, timestampToString };

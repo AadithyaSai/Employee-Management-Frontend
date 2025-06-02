@@ -1,6 +1,6 @@
 import { PillboxText } from "../../../../components";
 import type { Employee } from "../../../../store/employee/employee.types";
-import { dateToString } from "../../../../utils/conversions";
+import { timestampToString } from "../../../../utils/conversions";
 import "./employeeListItem.css";
 
 type ActionType = {
@@ -36,7 +36,7 @@ const EmployeeListItem = ({
     <div className="employee-row">
       <div>{employee.name}</div>
       <div>{employee.employeeId}</div>
-      <div>{dateToString(employee.dateOfJoining)}</div>
+      <div>{timestampToString(employee.dateOfJoining)}</div>
       <div>{employee.role}</div>
       <div>
         {

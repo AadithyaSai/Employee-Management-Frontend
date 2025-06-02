@@ -2,22 +2,18 @@ import { useNavigate } from "react-router-dom";
 import { EmployeeForm, SectionHeader } from "../../components";
 import "./createEmployee.css";
 import { useState } from "react";
-import {
-  EMPLOYEE_ACTION_TYPES,
-  type Employee,
-} from "../../store/employee/employee.types";
-import { useDispatch } from "react-redux";
+import { type Employee } from "../../store/employee/employee.types";
+import { useAppDispatch } from "../../store/store";
+import { addEmployee } from "../../store/employee/employeeReducer";
 
 const CreateEmployee = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [employee, setEmployee] = useState<Employee>({ id: -1 } as Employee);
 
   const createClicked = () => {
-    dispatch({
-      type: EMPLOYEE_ACTION_TYPES.ADD,
-      payload: employee,
-    });
+    employee.id = Math.floor(1000 + Math.random() * 8999);
+    dispatch(addEmployee(employee));
     navigate("/employees");
   };
   const cancelClicked = () => navigate(-1);

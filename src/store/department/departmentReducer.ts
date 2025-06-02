@@ -1,10 +1,7 @@
-import {
-  DEPARTMENT_ACTION_TYPES,
-  type DepartmentAction,
-  type DepartmentState,
-} from "./department.types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { type Department, type DepartmentState } from "./department.types";
 
-const initialDepartmentState: DepartmentState = [
+const initialState: DepartmentState = [
   {
     id: 1,
     name: "MARKETTING",
@@ -23,22 +20,24 @@ const initialDepartmentState: DepartmentState = [
   },
 ];
 
-const departmentReducer = (
-  state = initialDepartmentState,
-  action: DepartmentAction
-) => {
-  switch (action.type) {
-    case DEPARTMENT_ACTION_TYPES.ADD:
-      return [...state, action.payload];
-    case DEPARTMENT_ACTION_TYPES.DELETE:
-      return state.filter((dept) => dept.id !== action.payload);
-    case DEPARTMENT_ACTION_TYPES.UPDATE:
+const departmentSlice = createSlice({
+  name: "departments",
+  initialState,
+  reducers: {
+    addDepartment: (state, action: PayloadAction<Department>) => {
+      state.push(action.payload);
+    },
+    updateDepartment: (state, action: PayloadAction<Department>) => {
       return state.map((dept) =>
         dept.id === action.payload.id ? action.payload : dept
       );
-    default:
-      return state;
-  }
-};
+    },
+    deleteDepartment: (state, action: PayloadAction<number>) => {
+      return state.filter((dept) => dept.id !== action.payload);
+    },
+  },
+});
 
-export default departmentReducer;
+export const { addDepartment, updateDepartment, deleteDepartment } =
+  departmentSlice.actions;
+export default departmentSlice.reducer;

@@ -8,12 +8,9 @@ import {
 import "./employeeList.css";
 import { lazy, Suspense, useMemo, useRef, useState } from "react";
 import EmployeeListItemFallback from "./components/employeeListitem/fallback/employeeListItemFallback";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  EMPLOYEE_ACTION_TYPES,
-  EmployeeStatus,
-} from "../../store/employee/employee.types";
-import type { rootState } from "../../store/store";
+import { EmployeeStatus } from "../../store/employee/employee.types";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { deleteEmployee } from "../../store/employee/employeeReducer";
 
 // Lazy Loading
 const EmployeeListItem = lazy(
@@ -21,13 +18,13 @@ const EmployeeListItem = lazy(
 );
 
 const EmployeeList = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState(-1);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const allEmployees = useSelector((state: rootState) => state.employees);
+  const allEmployees = useAppSelector((state) => state.employees);
   const filterStatus = searchParams.get("status") ?? "ALL";
   const visibleEmployees = useMemo(() => {
     if (!filterStatus || filterStatus === "ALL") return allEmployees;
@@ -37,11 +34,8 @@ const EmployeeList = () => {
 
   const navigate = useNavigate();
 
-  const deleteEmployee = (id: number) => {
-    dispatch({
-      type: EMPLOYEE_ACTION_TYPES.DELETE,
-      payload: id,
-    });
+  const deleteEmployeeOnConfirm = (id: number) => {
+    dispatch(deleteEmployee(id));
   };
 
   const createIcon = (
@@ -108,7 +102,7 @@ const EmployeeList = () => {
         description="Do you really want to delete employee?"
         ref={deleteDialogRef}
         onResponse={(val) =>
-          val === "confirm" && deleteEmployee(employeeIdToDelete)
+          val === "confirm" && deleteEmployeeOnConfirm(employeeIdToDelete)
         }
       ></DialogBox>
       <main className="employee-list-main">

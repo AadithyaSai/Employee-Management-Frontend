@@ -2,14 +2,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { EmployeeForm, SectionHeader } from "../../components";
 import "./editEmployee.css";
 import { useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { EMPLOYEE_ACTION_TYPES } from "../../store/employee/employee.types";
-import type { rootState } from "../../store/store";
+import { shallowEqual } from "react-redux";
+import {
+  useAppDispatch,
+  useAppSelector,
+  type RootState,
+} from "../../store/store";
+import { updateEmployee } from "../../store/employee/employeeReducer";
 
 const EditEmployee = () => {
   const id = parseInt(useParams()["id"] ?? "NaN");
-  const employeeDetails = useSelector(
-    (state: rootState) => state.employees.find((e) => e.id === id),
+  const employeeDetails = useAppSelector(
+    (state: RootState) => state.employees.find((e) => e.id === id),
     shallowEqual
   );
 
@@ -19,14 +23,11 @@ const EditEmployee = () => {
 
   const [employee, setEmployee] = useState(employeeDetails);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const editClicked = () => {
-    dispatch({
-      type: EMPLOYEE_ACTION_TYPES.UPDATE,
-      payload: employee,
-    });
+    dispatch(updateEmployee(employee));
     navigate(`/employees/${id}`);
   };
 
