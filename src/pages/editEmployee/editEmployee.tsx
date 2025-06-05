@@ -13,6 +13,9 @@ import {
 } from "../../api-service/employees/employees.api";
 import { timestampToString } from "../../utils/conversions";
 import type { Employee } from "../../store/employee/employee.types";
+import { jwtDecode } from "jwt-decode";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import type { JWTPayload } from "../types";
 
 const EditEmployee = () => {
   const id = parseInt(useParams()["id"] ?? "NaN");
@@ -25,11 +28,19 @@ const EditEmployee = () => {
     isLoading: employeeDetailsIsLoading,
     isFetching: employeeDetailsIsFetching,
   } = useGetOneEmployeeQuery(id);
+  
   const [
     editEmployee,
     { isLoading: updateIsLoading, isError: updateIsError, error: updateError },
   ] = useUpdateEmployeeMutation();
   const navigate = useNavigate();
+
+  const [token] = useLocalStorage("token", "");
+  const tokenPayload = jwtDecode<JWTPayload>(token);
+
+  if (!["ADMIN", "HR"].includes(tokenPayload.role) && id !== tokenPayload.id) {
+    throw new Error("You dont have permission to access this page");
+  }
 
   const editClicked = async (e?: React.FormEvent) => {
     if (!e) return;
