@@ -89,7 +89,7 @@ const Profile = () => {
         endAdornment={
           <Link
             style={{ color: "inherit", textDecoration: "inherit" }}
-            to="edit"
+            to={`/employees/${id}/edit`}
           >
             <PillboxButton icon={editIcon} text="Edit" />{" "}
           </Link>
