@@ -49,8 +49,12 @@ const router = createBrowserRouter([
       />
     ),
     children: [
-      { index: true, element: <EmployeeList /> },
-      { path: "create", element: <CreateEmployee /> },
+      { index: true, element: <EmployeeList />, errorElement: <NotFound /> },
+      {
+        path: "create",
+        element: <CreateEmployee />,
+        errorElement: <NotFound />,
+      },
       { path: "profile", element: <Profile />, errorElement: <NotFound /> },
       { path: ":id", element: <EmployeeDetails />, errorElement: <NotFound /> },
       {
