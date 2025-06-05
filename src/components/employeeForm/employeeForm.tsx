@@ -7,14 +7,15 @@ import Button from "../button/Button";
 import SelectInputField from "../selectInputField/selectInputField";
 import TextInputField from "../textInputField/textInputField";
 import "./employeeForm.css";
-import { useAppSelector } from "../../store/store";
 import { timestampToString } from "../../utils/conversions";
+import { useListDepartmentQuery } from "../../api-service/departments/departments.api";
+import Loader from "../loader/loader";
 
 type EmployeeFormProps = {
   employee: Employee;
   setEmployee: (employee: Employee) => void;
   handleCancel: () => void;
-  handleSave: () => void;
+  handleSave: (e?: React.FormEvent) => void;
 };
 
 const EmployeeForm = ({
@@ -25,12 +26,14 @@ const EmployeeForm = ({
 }: EmployeeFormProps) => {
   const isEdit = employee.id !== -1;
 
-  const departments = useAppSelector((state) => state.departments);
+  const { data: departments, isLoading } = useListDepartmentQuery();
+  if (isLoading || !departments) return <Loader isVisible={true} />;
+
   const roles = Object.values(EmployeeRole);
   const statuses = Object.values(EmployeeStatus);
 
   return (
-    <form className="employee-form">
+    <form className="employee-form" onSubmit={handleSave}>
       <div className="employee-detail-input-section">
         <TextInputField
           label="Employee Name"
@@ -52,9 +55,10 @@ const EmployeeForm = ({
         />
         <TextInputField
           label="Password"
-          placeholder="Password"
+          disabled={isEdit}
+          placeholder={isEdit ? "Contact admin to change password" : "Password"}
           name="password"
-          value={employee.password || ""}
+          value={isEdit ? "" : employee.password || ""}
           // style={{ display: "none" }}
           onChange={(e) => {
             setEmployee({ ...employee, [e.target.name]: e.target.value });
@@ -64,9 +68,12 @@ const EmployeeForm = ({
           label="Age"
           placeholder="Age"
           name="age"
-          value={employee.age ? employee.age.toString() : ""}
+          value={employee.age !== undefined ? employee.age.toString() : ""}
           onChange={(e) => {
-            setEmployee({ ...employee, [e.target.name]: e.target.value });
+            setEmployee({
+              ...employee,
+              [e.target.name]: parseInt(e.target.value || "0"),
+            });
           }}
         />
         <TextInputField
@@ -90,9 +97,16 @@ const EmployeeForm = ({
           label="Experience (Yrs)"
           placeholder="Experience"
           name="experience"
-          value={employee.experience ? employee.experience.toString() : ""}
+          value={
+            employee.experience !== undefined
+              ? employee.experience.toString()
+              : ""
+          }
           onChange={(e) => {
-            setEmployee({ ...employee, [e.target.name]: e.target.value });
+            setEmployee({
+              ...employee,
+              [e.target.name]: parseInt(e.target.value || "0"),
+            });
           }}
         />
         <SelectInputField
@@ -197,7 +211,7 @@ const EmployeeForm = ({
             placeholder="Pincode"
             name="pincode"
             value={
-              employee.address && employee.address.pincode
+              employee.address && employee.address.pincode !== undefined
                 ? employee.address.pincode
                 : ""
             }
@@ -206,7 +220,7 @@ const EmployeeForm = ({
                 ...employee,
                 address: {
                   ...employee.address,
-                  [e.target.name]: e.target.value,
+                  [e.target.name]: parseInt(e.target.value || "0"),
                 },
               });
             }}
@@ -226,7 +240,7 @@ const EmployeeForm = ({
       <div className="form-buttons">
         <Button
           label={isEdit ? "Edit" : "Create"}
-          onClick={handleSave}
+          type="submit"
           variants="default"
         />
         <Button label="Cancel" onClick={handleCancel} variants="outline" />

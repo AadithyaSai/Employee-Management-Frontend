@@ -1,3 +1,4 @@
+import AccessControlledRoute from "./accessControlledRoute/accessControlledRoute";
 import Button from "./button/Button";
 import CheckBox from "./checkBox/checkBox";
 import DialogBox from "./dialogBox/dialogBox";
@@ -28,4 +29,5 @@ export {
   PillboxText,
   DialogBox,
   EmployeeForm,
+  AccessControlledRoute,
 };

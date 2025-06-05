@@ -18,7 +18,7 @@ const NotFound = () => (
           <path d="M40 70V80H80V70H40Z" fill="#03AEEE" />
         </svg>
       </div>
-      <h1>Page Not Found</h1>
+      <h1>Uh Oh! Something went wrong!</h1>
       <p>The page you are looking for doesn't exist or has been moved.</p>
       <Link to="/" className="button button--primary return-home-btn">
         Return to Home

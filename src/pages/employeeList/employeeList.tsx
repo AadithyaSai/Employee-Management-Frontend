@@ -1,41 +1,45 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   DialogBox,
+  Loader,
   PillboxButton,
   SectionHeader,
   SelectInputField,
 } from "../../components";
 import "./employeeList.css";
-import { lazy, Suspense, useMemo, useRef, useState } from "react";
-import EmployeeListItemFallback from "./components/employeeListitem/fallback/employeeListItemFallback";
+import { useMemo, useRef, useState } from "react";
 import { EmployeeStatus } from "../../store/employee/employee.types";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { deleteEmployee } from "../../store/employee/employeeReducer";
-
-// Lazy Loading
-const EmployeeListItem = lazy(
-  () => import("./components/employeeListitem/employeeListItem")
-);
+import {
+  useDeleteEmployeeMutation,
+  useListEmployeeQuery,
+} from "../../api-service/employees/employees.api";
+import EmployeeListItem from "./components/employeeListitem/employeeListItem";
 
 const EmployeeList = () => {
-  const dispatch = useAppDispatch();
-  const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
+  const [triggerEmployeeDelete, employeeDeleteData] =
+    useDeleteEmployeeMutation();
+  
+    const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
+
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState(-1);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const allEmployees = useAppSelector((state) => state.employees);
+  const allEmployeeData = useListEmployeeQuery();
   const filterStatus = searchParams.get("status") ?? "ALL";
   const visibleEmployees = useMemo(() => {
-    if (!filterStatus || filterStatus === "ALL") return allEmployees;
+    if (!filterStatus || filterStatus === "ALL")
+      return allEmployeeData.data ?? [];
 
-    return allEmployees.filter((emp) => emp.status === filterStatus);
-  }, [allEmployees, filterStatus]);
+    return allEmployeeData.data
+      ? allEmployeeData.data.filter((emp) => emp.status === filterStatus)
+      : [];
+  }, [allEmployeeData.data, filterStatus]);
 
   const navigate = useNavigate();
 
   const deleteEmployeeOnConfirm = (id: number) => {
-    dispatch(deleteEmployee(id));
+    triggerEmployeeDelete(id);
   };
 
   const createIcon = (
@@ -105,6 +109,13 @@ const EmployeeList = () => {
           val === "confirm" && deleteEmployeeOnConfirm(employeeIdToDelete)
         }
       ></DialogBox>
+      <Loader
+        isVisible={
+          allEmployeeData.isLoading ||
+          allEmployeeData.isFetching ||
+          employeeDeleteData.isLoading
+        }
+      ></Loader>
       <main className="employee-list-main">
         <SectionHeader
           title={`Employee List`}
@@ -142,32 +153,35 @@ const EmployeeList = () => {
           <div className="list-items">
             {visibleEmployees.map((employee) => {
               return (
-                <Suspense
+                <Link
+                  to={`${employee.id}`}
                   key={employee.id}
-                  fallback={<EmployeeListItemFallback />}
+                  style={{
+                    color: "inherit",
+                    textDecoration: "inherit",
+                    display:
+                      allEmployeeData.isLoading || allEmployeeData.isFetching
+                        ? "none"
+                        : "block",
+                  }}
                 >
-                  <Link
-                    to={`${employee.id}`}
-                    style={{ color: "inherit", textDecoration: "inherit" }}
-                  >
-                    <EmployeeListItem
-                      employee={employee}
-                      action1={{
-                        icon: deleteIcon,
-                        actionFn: () => {
-                          setEmployeeIdToDelete(employee.id);
-                          deleteDialogRef.current?.showModal();
-                        },
-                      }}
-                      action2={{
-                        icon: editIcon,
-                        actionFn: () => {
-                          navigate(`/employees/${employee.id}/edit`);
-                        },
-                      }}
-                    />
-                  </Link>
-                </Suspense>
+                  <EmployeeListItem
+                    employee={employee}
+                    action1={{
+                      icon: deleteIcon,
+                      actionFn: () => {
+                        setEmployeeIdToDelete(employee.id);
+                        deleteDialogRef.current?.showModal();
+                      },
+                    }}
+                    action2={{
+                      icon: editIcon,
+                      actionFn: () => {
+                        navigate(`/employees/${employee.id}/edit`);
+                      },
+                    }}
+                  />
+                </Link>
               );
             })}
           </div>

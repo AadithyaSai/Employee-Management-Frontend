@@ -20,6 +20,7 @@ export const EmployeeRole = {
   UX: "UX",
   DEVELOPER: "DEVELOPER",
   HR: "HR",
+  ADMIN: "ADMIN",
 } as const;
 
 export type Role = (typeof EmployeeRole)[keyof typeof EmployeeRole];
@@ -41,7 +42,7 @@ export interface Employee {
   address: Address;
   password: string;
   role: Role;
-  dateOfJoining: number;
+  dateOfJoining: string;
   experience: number;
   status: Status;
   department: Department;

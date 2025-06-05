@@ -1,6 +1,6 @@
 import type { Address } from "../store/employee/employee.types";
 
-const timestampToString = (ts: number) => {
+const timestampToString = (ts: string) => {
   return new Date(ts).toLocaleDateString("en-CA");
 };
 

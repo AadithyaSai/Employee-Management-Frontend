@@ -1,48 +1,93 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { EmployeeForm, SectionHeader } from "../../components";
-import "./editEmployee.css";
-import { useState } from "react";
-import { shallowEqual } from "react-redux";
 import {
-  useAppDispatch,
-  useAppSelector,
-  type RootState,
-} from "../../store/store";
-import { updateEmployee } from "../../store/employee/employeeReducer";
+  DialogBox,
+  EmployeeForm,
+  Loader,
+  SectionHeader,
+} from "../../components";
+import "./editEmployee.css";
+import { useEffect, useRef, useState } from "react";
+import {
+  useGetOneEmployeeQuery,
+  useUpdateEmployeeMutation,
+} from "../../api-service/employees/employees.api";
+import { timestampToString } from "../../utils/conversions";
+import type { Employee } from "../../store/employee/employee.types";
 
 const EditEmployee = () => {
   const id = parseInt(useParams()["id"] ?? "NaN");
-  const employeeDetails = useAppSelector(
-    (state: RootState) => state.employees.find((e) => e.id === id),
-    shallowEqual
-  );
 
-  if (!employeeDetails) {
-    throw new Error("Bad ID");
-  }
+  const dialogBoxRef = useRef<HTMLDialogElement>(null);
 
-  const [employee, setEmployee] = useState(employeeDetails);
-
-  const dispatch = useAppDispatch();
+  const [employee, setEmployee] = useState<Employee>({} as Employee);
+  const {
+    data: employeeDetails,
+    isLoading: employeeDetailsIsLoading,
+    isFetching: employeeDetailsIsFetching,
+  } = useGetOneEmployeeQuery(id);
+  const [
+    editEmployee,
+    { isLoading: updateIsLoading, isError: updateIsError, error: updateError },
+  ] = useUpdateEmployeeMutation();
   const navigate = useNavigate();
 
-  const editClicked = () => {
-    dispatch(updateEmployee(employee));
-    navigate(`/employees/${id}`);
+  const editClicked = async (e?: React.FormEvent) => {
+    if (!e) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    await editEmployee({
+      ...employee,
+      dateOfJoining: timestampToString(employee.dateOfJoining),
+      password: "",
+    })
+      .unwrap()
+      .then(() => navigate(`/employees/${id}`));
   };
 
   const cancelClicked = () => navigate(-1);
 
+  useEffect(() => {
+    if (employeeDetails) setEmployee(employeeDetails);
+  }, [employeeDetails]);
+
+  useEffect(() => {
+    if (updateIsError) {
+      dialogBoxRef.current?.showModal();
+    }
+  }, [updateIsError]);
+
+  if (
+    employeeDetailsIsLoading ||
+    employeeDetailsIsFetching ||
+    !employee ||
+    updateIsLoading
+  )
+    return <Loader isVisible={true} />;
+
   return (
-    <main className="edit-employee-page-main">
-      <SectionHeader title="Edit Employee" />
-      <EmployeeForm
-        employee={employee}
-        setEmployee={setEmployee}
-        handleCancel={cancelClicked}
-        handleSave={editClicked}
+    <>
+      <DialogBox
+        title="Uh Oh... Something went wrong"
+        description={
+          updateError && "data" in updateError
+            ? Object.values(updateError.data as object).join("")
+            : ""
+        }
+        onResponse={() => {}}
+        ref={dialogBoxRef}
       />
-    </main>
+      <main className="edit-employee-page-main">
+        <SectionHeader title="Edit Employee" />
+        <EmployeeForm
+          employee={employee}
+          setEmployee={setEmployee}
+          handleCancel={cancelClicked}
+          handleSave={editClicked}
+        />
+      </main>
+    </>
   );
 };
 

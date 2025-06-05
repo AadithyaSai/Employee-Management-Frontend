@@ -1,21 +1,39 @@
 import { Link, useParams } from "react-router-dom";
-import { PillboxButton, PillboxText, SectionHeader } from "../../components";
+import {
+  Loader,
+  PillboxButton,
+  PillboxText,
+  SectionHeader,
+} from "../../components";
 import "./employeeDetails.css";
 import DetailField from "./components/detailField/detailField";
 import { addressToString, timestampToString } from "../../utils/conversions";
-import { shallowEqual } from "react-redux";
-import { useAppSelector, type RootState } from "../../store/store";
+import { useGetOneEmployeeQuery } from "../../api-service/employees/employees.api";
 
 const EmployeeDetails = () => {
   const id = parseInt(useParams()["id"] ?? "NaN");
-  const employee = useAppSelector(
-    (state: RootState) => state.employees.find((e) => e.id === id),
-    shallowEqual
-  );
+  const {
+    data: employee,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetOneEmployeeQuery(id);
 
-  if (!employee) {
-    throw new Error("Bad ID");
-  }
+  if (isError) throw new Error("Bad ID");
+  if (isLoading || isFetching || !employee) return <Loader isVisible={true} />;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "ACTIVE":
+        return "green";
+      case "INACTIVE":
+        return "red";
+      case "PROBATION":
+        return "yellow";
+      default:
+        return "none";
+    }
+  };
 
   const editIcon = (
     <svg
@@ -80,7 +98,12 @@ const EmployeeDetails = () => {
         <DetailField header="Role" data={employee.role} />
         <DetailField
           header="Status"
-          data={<PillboxText text={employee.status!} color="yellow" />}
+          data={
+            <PillboxText
+              text={employee.status!}
+              color={getStatusColor(employee.status)}
+            />
+          }
         />
         <DetailField header="Department" data={employee.department.name} />
         <DetailField

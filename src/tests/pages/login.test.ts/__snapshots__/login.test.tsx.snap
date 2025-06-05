@@ -1,0 +1,175 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Login Page > should match snapshot 1`] = `
+<div>
+  <div
+    class="loader-bg disappear"
+  >
+    <div
+      class="loader-container"
+    >
+      <svg
+        viewBox="0 0 200 200"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <lineargradient
+          id="a11"
+        >
+          <stop
+            offset="0"
+            stop-color="#03AEEE"
+            stop-opacity="0"
+          />
+          <stop
+            offset="1"
+            stop-color="#03AEEE"
+          />
+        </lineargradient>
+        <circle
+          cx="100"
+          cy="100"
+          fill="none"
+          r="70"
+          stroke="url(#a11)"
+          stroke-dasharray="0 44 0 44 0 44 0 44 0 360"
+          stroke-linecap="round"
+          stroke-width="15"
+          transform-origin="center"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="login-content"
+  >
+    <aside
+      class="login-aside"
+    >
+      <img
+        alt="stock image for login"
+        class="circle-img"
+        src="/assets/kv-login.jpeg"
+      />
+    </aside>
+    <main
+      class="login-main"
+    >
+      <div
+        class="login-form-content"
+      >
+        <div
+          class="logo-div"
+        >
+          <a
+            href="#"
+          >
+            <img
+              alt="logo"
+              class="logo"
+              src="/assets/kv-logo.png"
+            />
+          </a>
+        </div>
+        <div>
+          <div
+            class="text-input-field-div"
+          >
+            <label
+              class="label--animated"
+            >
+              <input
+                class="input--animated"
+                name="username"
+                placeholder=""
+                required=""
+                type="text"
+                value=""
+              />
+              <span>
+                Username
+              </span>
+              <div
+                class="end-adornment"
+              >
+                <button
+                  style="background: none; font-size: 16px; cursor: pointer; display: none;"
+                  type="button"
+                >
+                  ×
+                </button>
+              </div>
+            </label>
+          </div>
+          <p
+            style="margin-left: 6px; color: red;"
+          >
+            Username is required
+          </p>
+        </div>
+        <div>
+          <div
+            style="margin-bottom: 12px;"
+          >
+            <div
+              class="text-input-field-div"
+            >
+              <label
+                class="label--animated"
+              >
+                <input
+                  class="input--animated"
+                  name="password"
+                  placeholder=""
+                  required=""
+                  type="password"
+                  value=""
+                />
+                <span>
+                  Password
+                </span>
+                <div
+                  class="end-adornment"
+                />
+              </label>
+            </div>
+            <p
+              style="margin-left: 6px; color: red;"
+            >
+              Password is required
+            </p>
+          </div>
+          <div
+            style="margin-left: 3px;"
+          >
+            <label
+              class="checkbox-label"
+            >
+              <input
+                class="checkbox-input"
+                name="show-password"
+                type="checkbox"
+              />
+              <span
+                class="checkbox-text-span"
+              >
+                Show password
+              </span>
+            </label>
+          </div>
+        </div>
+        <button
+          class="button  button--default button--full-width undefined"
+          disabled=""
+          type="button"
+        >
+           
+          Log In
+        </button>
+        <p
+          style="margin-left: 6px; color: green;"
+        />
+      </div>
+    </main>
+  </div>
+</div>
+`;

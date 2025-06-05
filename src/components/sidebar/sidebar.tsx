@@ -9,7 +9,7 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ children }: SidebarProps) => {
-  const [, setLoginToken] = useLocalStorage("isLoggedIn");
+  const [, setLoginToken] = useLocalStorage("token");
   const navigate = useNavigate();
 
   const logoutIcon = (
@@ -31,7 +31,7 @@ const Sidebar = ({ children }: SidebarProps) => {
   );
 
   const handleSignout = () => {
-    setLoginToken("false");
+    setLoginToken("");
     navigate("/login");
   };
 

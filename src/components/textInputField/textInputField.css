@@ -14,6 +14,10 @@
   border: 1px solid #e4e4e4;
 }
 
+.text-input-field-div input[type="date"] {
+  cursor: pointer;
+}
+
 .text-input-field-div input::placeholder {
   color: #747474;
 }

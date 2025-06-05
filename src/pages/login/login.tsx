@@ -6,9 +6,11 @@ import "./login.css";
 import { useEffect, useRef, useState } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../api-service/auth/login.api";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [login] = useLoginMutation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({
@@ -17,7 +19,7 @@ const Login = () => {
     passwordError: "",
   });
   const usernameRef = useRef<HTMLInputElement | null>(null);
-  const [, setIsLoggedIn] = useLocalStorage("isLoggedIn", "false");
+  const [, setIsLoggedIn] = useLocalStorage("token", "");
   const [isPasswordShown, setIsPasswordShown] = useLocalStorage(
     "isPasswordShown",
     "false"
@@ -25,23 +27,22 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setIsLoading(true);
-    setTimeout(() => {
-      if (username !== "admin" || password !== "password") {
-        setUsername("");
-        setPassword("");
-        setIsLoading(false);
-        setValidationErrors((err) => {
-          return { ...err, loginError: "Wrong username or password" };
-        });
-        return;
-      }
-
-      setIsLoggedIn("true");
-      setIsLoading(false);
-      navigate("/employees");
-    }, 2000);
+    const payload = { email: username, password };
+    login(payload)
+      .unwrap()
+      .then((res) => {
+        setIsLoggedIn(res.accessToken);
+        navigate("/employees");
+      })
+      .catch(() => {
+        setValidationErrors((err) => ({
+          ...err,
+          loginError: "Invalid username or password",
+        }));
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
