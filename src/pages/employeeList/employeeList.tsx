@@ -18,8 +18,8 @@ import EmployeeListItem from "./components/employeeListitem/employeeListItem";
 const EmployeeList = () => {
   const [triggerEmployeeDelete, employeeDeleteData] =
     useDeleteEmployeeMutation();
-  
-    const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
+
+  const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
 
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState(-1);
 
@@ -141,14 +141,16 @@ const EmployeeList = () => {
           }
         ></SectionHeader>
         <div className="employee-list-content">
-          <div className="list-header">
-            <p>Employee Name</p>
-            <p>Employee ID</p>
-            <p>Joining Date</p>
-            <p>Role</p>
-            <p>Status</p>
-            <p>Experience</p>
-            <p>Action</p>
+          <div className="list-header-container">
+            <div className="list-header-content">
+              <p>Employee Name</p>
+              <p>Employee ID</p>
+              <p>Joining Date</p>
+              <p>Role</p>
+              <p>Status</p>
+              <p>Experience</p>
+              <p>Action</p>
+            </div>
           </div>
           <div className="list-items">
             {visibleEmployees.map((employee) => {

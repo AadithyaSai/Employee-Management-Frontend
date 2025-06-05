@@ -13,20 +13,28 @@
   gap: 16px;
 }
 
-.employee-list-content .list-header {
-  background-color: #eaf9ff;
+.employee-list-content .list-header-container {
   width: 100%;
+  display: flex;
+  border-radius: 5px;
+  position: sticky;
+  top: 100px;
+  z-index: 10;
+  backdrop-filter: blur(3px);
+}
+
+.employee-list-content .list-header-content {
+  margin-top: 8px;
+  width: 100%;
+  background-color: #eaf9ff;
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 18px;
   border-radius: 5px;
-  position: sticky;
-  top: 108px;
-  z-index: 10;
 }
 
-.employee-list-content .list-header p {
+.employee-list-content .list-header-content p {
   width: 14%;
   font-weight: bold;
 }
