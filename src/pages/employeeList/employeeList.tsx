@@ -14,8 +14,14 @@ import {
   useListEmployeeQuery,
 } from "../../api-service/employees/employees.api";
 import EmployeeListItem from "./components/employeeListitem/employeeListItem";
+import { jwtDecode } from "jwt-decode";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import type { JWTPayload } from "../types";
 
 const EmployeeList = () => {
+  const [token] = useLocalStorage("token", "");
+  const tokenPayload = jwtDecode<JWTPayload>(token);
+
   const [triggerEmployeeDelete, employeeDeleteData] =
     useDeleteEmployeeMutation();
 
@@ -169,6 +175,7 @@ const EmployeeList = () => {
                 >
                   <EmployeeListItem
                     employee={employee}
+                    actionEnabled={["ADMIN", "HR"].includes(tokenPayload.role)}
                     action1={{
                       icon: deleteIcon,
                       actionFn: () => {

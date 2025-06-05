@@ -6,6 +6,7 @@ import { Login, NotFound } from "./pages";
 const CreateEmployee = lazy(
   () => import("./pages/createEmployee/createEmployee")
 );
+const Profile = lazy(() => import("./pages/profile/profile"));
 const EditEmployee = lazy(() => import("./pages/editEmployee/editEmployee"));
 const EmployeeDetails = lazy(
   () => import("./pages/employeeDetails/employeeDetails")
@@ -14,7 +15,7 @@ const EmployeeList = lazy(() => import("./pages/employeeList/employeeList"));
 
 const isLoggedIn = () => {
   const token = localStorage.getItem("token");
-  return token && token !== "";
+  return token !== null && token !== "";
 };
 
 const router = createBrowserRouter([
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <EmployeeList /> },
       { path: "create", element: <CreateEmployee /> },
+      { path: "profile", element: <Profile />, errorElement: <NotFound /> },
       { path: ":id", element: <EmployeeDetails />, errorElement: <NotFound /> },
       {
         path: ":id/edit",

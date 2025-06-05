@@ -1,22 +1,25 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import {
   Loader,
   PillboxButton,
   PillboxText,
   SectionHeader,
+  DetailField,
 } from "../../components";
-import "./employeeDetails.css";
-import DetailField from "../../components/detailField/detailField";
 import { addressToString, timestampToString } from "../../utils/conversions";
 import { useGetOneEmployeeQuery } from "../../api-service/employees/employees.api";
-import type { JWTPayload } from "../types";
-import { jwtDecode } from "jwt-decode";
-import useLocalStorage from "../../hooks/useLocalStorage";
 
-const EmployeeDetails = () => {
+import profileIcon from "/assets/profile-icon.svg";
+
+import "./profile.css";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import type { JWTPayload } from "../types";
+
+const Profile = () => {
   const [token] = useLocalStorage("token", "");
   const tokenPayload = jwtDecode<JWTPayload>(token);
-  const id = parseInt(useParams()["id"] ?? "NaN");
+  const id = tokenPayload.id;
 
   const {
     data: employee,
@@ -80,56 +83,63 @@ const EmployeeDetails = () => {
   );
 
   return (
-    <main className="employee-details-main">
+    <main className="profile-main">
       <SectionHeader
-        title={`Employee details of ${employee.name}`}
+        title="Profile"
         endAdornment={
-          !["ADMIN", "HR"].includes(tokenPayload.role) || (
-            <Link
-              style={{ color: "inherit", textDecoration: "inherit" }}
-              to="edit"
-            >
-              <PillboxButton icon={editIcon} text="Edit" />{" "}
-            </Link>
-          )
+          <Link
+            style={{ color: "inherit", textDecoration: "inherit" }}
+            to="edit"
+          >
+            <PillboxButton icon={editIcon} text="Edit" />{" "}
+          </Link>
         }
       ></SectionHeader>
-      <div className="details-content">
-        <DetailField header="Employee Name" data={employee.name} />
-        <DetailField header="Email" data={employee.email} />
-        <DetailField header="Age" data={employee.age} />
-        <DetailField
-          header="Joining Date"
-          data={timestampToString(employee.dateOfJoining)}
-        />
-        <DetailField header="Experience" data={employee.experience} />
-        <DetailField header="Role" data={employee.role} />
-        <DetailField
-          header="Status"
-          data={
+      <div className="profile-container">
+        <div className="profile-right">
+          <div className="profile-picture-container">
+            <img
+              className="profile-picture"
+              src={profileIcon}
+              alt="profile picture"
+            />
+          </div>
+          <div className="profile-text-container">
+            <p className="profile-name">{employee.name}</p>
+
+            <p className="profile-role">{employee.role}</p>
             <PillboxText
               text={employee.status!}
               color={getStatusColor(employee.status)}
             />
-          }
-        />
-        <DetailField header="Department" data={employee.department.name} />
-        <DetailField
-          header="Address"
-          data={
-            employee.address
-              ? addressToString(employee.address)
-              : "Some place some time some pincode 121222"
-          }
-        />
-        <DetailField
-          header="Employee ID Proof"
-          data={<div className="doc-icon">{docIcon}</div>}
-        />
-        <DetailField header="Employee ID" data={employee.employeeId} />
+          </div>
+        </div>
+        <div className="profile-content">
+          <DetailField header="Employee ID" data={employee.employeeId} />
+          <DetailField header="Department" data={employee.department.name} />
+          <DetailField header="Email" data={employee.email} />
+          <DetailField header="Age" data={employee.age} />
+          <DetailField
+            header="Joining Date"
+            data={timestampToString(employee.dateOfJoining)}
+          />
+          <DetailField header="Experience" data={employee.experience} />
+          <DetailField
+            header="Employee ID Proof"
+            data={<div className="doc-icon">{docIcon}</div>}
+          />
+          <DetailField
+            header="Address"
+            data={
+              employee.address
+                ? addressToString(employee.address)
+                : "Some place some time some pincode 121222"
+            }
+          />
+        </div>
       </div>
     </main>
   );
 };
 
-export default EmployeeDetails;
+export default Profile;

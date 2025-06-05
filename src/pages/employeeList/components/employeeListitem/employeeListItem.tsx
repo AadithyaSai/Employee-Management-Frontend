@@ -10,6 +10,7 @@ type ActionType = {
 
 type EmployeeListItemProps = {
   employee: Employee;
+  actionEnabled: boolean;
   action1: ActionType;
   action2: ActionType;
 };
@@ -18,6 +19,7 @@ const EmployeeListItem = ({
   employee,
   action1,
   action2,
+  actionEnabled,
 }: EmployeeListItemProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -51,6 +53,7 @@ const EmployeeListItem = ({
       }`}</div>
       <div className="actions">
         <div
+          style={{ display: !actionEnabled ? "none" : "block" }}
           className="action-icon"
           onClick={(event) => {
             event.stopPropagation();
@@ -62,6 +65,7 @@ const EmployeeListItem = ({
         </div>
         <div
           className="action-icon"
+          style={{ display: !actionEnabled ? "none" : "block" }}
           onClick={(event) => {
             event.stopPropagation();
             event.preventDefault();

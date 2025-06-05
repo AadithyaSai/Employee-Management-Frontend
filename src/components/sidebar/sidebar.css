@@ -25,6 +25,7 @@
   margin-top: 24px;
   display: flex;
   flex-direction: column;
+  gap: 18px;
 }
 
 .main-layout-aside-signout {

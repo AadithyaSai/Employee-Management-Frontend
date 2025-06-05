@@ -1,6 +1,7 @@
 import AccessControlledRoute from "./accessControlledRoute/accessControlledRoute";
 import Button from "./button/Button";
 import CheckBox from "./checkBox/checkBox";
+import DetailField from "./detailField/detailField";
 import DialogBox from "./dialogBox/dialogBox";
 import EmployeeForm from "./employeeForm/employeeForm";
 import Header from "./header/header";
@@ -30,4 +31,5 @@ export {
   DialogBox,
   EmployeeForm,
   AccessControlledRoute,
+  DetailField,
 };
